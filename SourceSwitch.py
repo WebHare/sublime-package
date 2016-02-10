@@ -1,6 +1,11 @@
 import sublime, sublime_plugin
 import os.path, re, sys
-from .findbuffer import CopyBuffer
+
+# Sublime Text 2 compatibility: Import from "findbuffer" instead of ".findbuffer"
+try:
+  from .findbuffer import *
+except ValueError:
+  from findbuffer import *
 
 
 class SourceSwitchCommand(sublime_plugin.TextCommand):

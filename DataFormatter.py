@@ -65,7 +65,10 @@ class DataFormatterThread(threading.Thread):
 
   def set_buffer(self, args):
 
-    self.buffer.run_command("set_data_formatter_result", args)
+    # Sublime Text 2 compatibility: ST 2 requires API calls to be run within the main thread
+    def _add():
+      self.buffer.run_command("set_data_formatter_result", args)
+    sublime.set_timeout(_add, 0)
 
 
 

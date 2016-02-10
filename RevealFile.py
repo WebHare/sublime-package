@@ -1,5 +1,10 @@
 import sublime, sublime_plugin
-from .filereveal import reveal_file
+
+# Sublime Text 2 compatibility: Import from "filereveal" instead of ".filereveal"
+try:
+  from .filereveal import *
+except ValueError:
+  from filereveal import *
 
 # The command to call to reveal the currently opened file in the system's file manager
 class RevealFileCommand(sublime_plugin.WindowCommand):

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>witty</string>
+	</array>
+	<key>name</key>
+	<string>Witty</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>begin</key>
+			<string>(?&lt;=[^\[])\[(?=[^\[])|(^\[(?=[^\[]))</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.begin</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\]</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.section.embedded.end</string>
+				</dict>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.witty</string>
+						</dict>
+						<key>2</key>
+						<dict>
+							<key>name</key>
+							<string>variable.other.witty</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>Component identifier</string>
+					<key>match</key>
+					<string>(?i)\b(component)[\s\n]+(\w+)</string>
+					<key>name</key>
+					<string>meta.component.witty</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>Witty keywords</string>
+					<key>match</key>
+					<string>(?i)\b(if|else|elseif|forevery|repeat|component|embed|embedoriginal|gettid|gethtmltid|not)\b</string>
+					<key>name</key>
+					<string>keyword.witty</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>Witty data types</string>
+					<key>match</key>
+					<string>(?i)\b(first|last|odd|even|seqnr)\b</string>
+					<key>name</key>
+					<string>storage.type.witty</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>Witty encodings</string>
+					<key>match</key>
+					<string>(?&lt;=:)(?i)\b(none|java|xml|value|html|xhtml|url|base16|base64|cdata)\b</string>
+					<key>name</key>
+					<string>storage.modifier.witty</string>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>(?&lt;=\[)!</string>
+					<key>comment</key>
+					<string>Block comments</string>
+					<key>end</key>
+					<string>!(?=\])</string>
+					<key>name</key>
+					<string>comment.block.witty</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>Witty variables</string>
+					<key>match</key>
+					<string>\w+</string>
+					<key>name</key>
+					<string>variable.other.witty</string>
+				</dict>
+			</array>
+		</dict>
+		<dict>
+			<key>include</key>
+			<string>text.html.basic</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.witty</string>
+	<key>uuid</key>
+	<string>6000fdc2-6819-41b8-a1d2-92c2d224d4be</string>
+</dict>
+</plist>

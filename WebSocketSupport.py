@@ -1,10 +1,30 @@
 import sublime, sublime_plugin
 import json, subprocess, sys, threading
 from ws4py.client.threadedclient import WebSocketClient
-from urllib.parse import urlsplit, urlunsplit
-from .filereveal import reveal_file
-from .whconnconfig import load_whconn_config
-from .popups import show_popup
+
+# Sublime Text 2 compatibility: Import from "urlparse" instead of "urllib.parse"
+try:
+  from urllib.parse import urlsplit, urlunsplit
+except ImportError:
+  from urlparse import urlsplit, urlunsplit
+
+# Sublime Text 2 compatibility: Import from "filereveal" instead of ".filereveal"
+try:
+  from .filereveal import *
+except ValueError:
+  from filereveal import *
+
+# Sublime Text 2 compatibility: Import from "whconnconfig" instead of ".whconnconfig"
+try:
+  from .whconnconfig import *
+except ValueError:
+  from whconnconfig import *
+
+# Sublime Text 2 compatibility: Import from "popups" instead of ".popups"
+try:
+  from .popups import *
+except ValueError:
+  from popups import *
 
 # Import the Pywin32 package if installed (for window activation on Windows)
 try:
@@ -73,7 +93,7 @@ def run_websocket_command(command, params=None):
   if thread:
     thread.sock.run_command(command, params)
   else:
-    sublime.status_message("WebSocket not connected")
+    status_message("WebSocket not connected")
 
 
 
@@ -98,7 +118,7 @@ class WebHareClientThread(threading.Thread):
   def run(self):
 
     # Connect the socket
-    sublime.status_message("Opening WebSocket")
+    status_message("Opening WebSocket")
     self.sock.connect()
 
 
@@ -106,7 +126,7 @@ class WebHareClientThread(threading.Thread):
 
     # If the socket is still connected, close the connection
     if not self.sock.client_terminated:
-      sublime.status_message("Closing WebSocket")
+      status_message("Closing WebSocket")
       self.sock.close()
 
 
@@ -118,7 +138,7 @@ class WebHareClient(WebSocketClient):
 
   def opened(self):
 
-    sublime.status_message("WebSocket connected")
+    status_message("WebSocket connected")
 
     # After the socket was connected, send our (WebDav) configuration
     print(self.config)
@@ -128,7 +148,7 @@ class WebHareClient(WebSocketClient):
 
   def closed(self, code, reason=None):
 
-    sublime.status_message("WebSocket disconnected")
+    status_message("WebSocket disconnected")
     print("WebSocket closed", code, reason)
     # The connection was closed, maybe because of external circumstances, so stop the thread
     stop_websocket_thread()
@@ -194,17 +214,24 @@ class WebHareClient(WebSocketClient):
 
 
   def open_file(self, filename):
-    win = sublime.active_window()
-    if win:
-      print("open", filename)
-      win.open_file(filename, sublime.ENCODED_POSITION)
-      self.activate_sublime()
+    # Sublime Text 2 compatibility: ST 2 requires API calls to be run within the main thread
+    def _open():
+      win = sublime.active_window()
+      if win:
+        print("open", filename)
+        win.open_file(filename, sublime.ENCODED_POSITION)
+        self.activate_sublime()
+    sublime.set_timeout(_open, 0)
 
 
   def activate_sublime(self):
     # Mac OS X: Use AppleScript to tell Sublime Text to activate
     if sys.platform.startswith("darwin"):
       script = 'tell application "Sublime Text" to activate'
+
+      # Sublime Text 2 compatibility: Tell application "Sublime Text 2"
+      if sys.version_info < (3,):
+        script = 'tell application "Sublime Text 2" to activate'
 
       print(script)
       command = ["/usr/bin/osascript", "-e", script]
@@ -235,6 +262,13 @@ class WebHareClient(WebSocketClient):
 
 
 
+def status_message(msg):
+  # Sublime Text 2 compatibility: ST 2 requires API calls to be run within the main thread
+  def _statmsg():
+    sublime.status_message(msg)
+  sublime.set_timeout(_statmsg, 0)
+
+
 def plugin_loaded():
 
   # Open WebSocket on plugin load, after a timeout (otherwise Sublime Text 2 would freeze on the 'new version' message box)
@@ -245,3 +279,9 @@ def plugin_unloaded():
 
   # Close WebSocket on plugin unload
   stop_websocket_thread()
+
+
+# Sublime Text 2 compatibility: Register plugin unload handler, call plugin load handler
+if sys.version_info < (3,):
+  unload_handler = plugin_unloaded
+  plugin_loaded()

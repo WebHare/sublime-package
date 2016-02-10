@@ -1,5 +1,10 @@
 import sublime
-import styled_popup
+
+# Sublime Text 2 compatibility: StyledPopup is only available for Sublime Text build 3070 and up
+try:
+  import styled_popup
+except:
+  pass
 
 
 

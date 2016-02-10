@@ -1,7 +1,17 @@
 import sublime, sublime_plugin
 import os, re, subprocess, sys, threading
-from .findbuffer import FindBuffer
-from .notification import Notification
+
+# Sublime Text 2 compatibility: Import from "findbuffer" instead of ".findbuffer"
+try:
+  from .findbuffer import *
+except ValueError:
+  from findbuffer import *
+
+# Sublime Text 2 compatibility: Import from "notification" instead of ".notification"
+try:
+  from .notification import *
+except ValueError:
+  from notification import *
 
 
 # The name (and title) of the results buffer
@@ -280,7 +290,10 @@ class CodegrepThread(threading.Thread):
 
   def add_to_buffer(self, args):
 
-    self.buffer.run_command("add_codegrep_result", args)
+    # Sublime Text 2 compatibility: ST 2 requires API calls to be run within the main thread
+    def _add():
+      self.buffer.run_command("add_codegrep_result", args)
+    sublime.set_timeout(_add, 0)
 
 
 
@@ -288,7 +301,8 @@ class CodegrepThread(threading.Thread):
 class AddCodegrepResultCommand(sublime_plugin.TextCommand):
 
   # Flags used when drawing a match region
-  region_flags = sublime.PERSISTENT | sublime.DRAW_NO_FILL
+  # Sublime Text 2 compatibility: Use DRAW_OUTLINED instead of DRAW_NO_FILL
+  region_flags = sublime.PERSISTENT | (sublime.DRAW_NO_FILL if hasattr(sublime, "DRAW_NO_FILL") else sublime.DRAW_OUTLINED)
 
   def run(self, edit, **args):
 
@@ -349,7 +363,11 @@ class MouseGotoCodegrepCommand(sublime_plugin.TextCommand):
   result_line_parser = re.compile(r"^[ ]+(\d+):")
 
 
-  def run_(self, edit, args):
+  def run_(self, args_or_edit, args=None):
+
+    # Sublime Text 2 compatibility: In ST2, run_ is called without the second 'edit' argument
+    if args is None and args_or_edit is not None:
+      args = args_or_edit
 
     # The user double clicked, check if the double click was in our Codegrep results view
     if not self.open_result():

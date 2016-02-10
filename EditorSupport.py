@@ -2,11 +2,36 @@ import sublime, sublime_plugin
 import copy, os, re, socket, subprocess, sys, webbrowser
 from threading import Timer
 from SublimeLinter.lint import highlight
-from xmlrpc.client import ServerProxy, Error
-from urllib.parse import urlsplit, urlunsplit
-from .WebSocketSupport import run_websocket_command
-from .findbuffer import FindBuffer
-from .whconnconfig import load_whconn_config
+
+# Sublime Text 2 compatibility: Import from "xmlrpclib" instead of "xmlrpc.client"
+try:
+  from xmlrpc.client import ServerProxy, Error
+except ImportError:
+  from xmlrpclib import ServerProxy, Error
+
+# Sublime Text 2 compatibility: Import from "urlparse" instead of "urllib.parse"
+try:
+  from urllib.parse import urlsplit, urlunsplit
+except ImportError:
+  from urlparse import urlsplit, urlunsplit
+
+# Sublime Text 2 compatibility: Import from "WebSocketSupport" instead of ".WebSocketSupport"
+try:
+  from .WebSocketSupport import run_websocket_command
+except ValueError:
+  from WebSocketSupport import run_websocket_command
+
+# Sublime Text 2 compatibility: Import from "findbuffer" instead of ".findbuffer"
+try:
+  from .findbuffer import *
+except ValueError:
+  from findbuffer import *
+
+# Sublime Text 2 compatibility: Import from "whconnconfig" instead of ".whconnconfig"
+try:
+  from .whconnconfig import *
+except ValueError:
+  from whconnconfig import *
 
 # The last retrieved file list
 filelist = []
@@ -151,7 +176,11 @@ class SymbolSearchCommand(sublime_plugin.WindowCommand):
 
 class MouseSymbolSearch(sublime_plugin.TextCommand):
 
-  def run_(self, edit, args):
+  def run_(self, args_or_edit, args=None):
+
+    # Sublime Text 2 compatibility: In ST2, run_ is called without the second 'edit' argument
+    if args is None and args_or_edit is not None:
+      args = args_or_edit
 
     # Run the command set in the args to select the word
     system_command = args["command"] if "command" in args else None
@@ -263,7 +292,11 @@ class DocumentationPopupCommand(sublime_plugin.WindowCommand):
 # The command to call to search a symbol and show the documentation in a popup
 class MouseDocumentationPopupCommand(sublime_plugin.TextCommand):
 
-  def run_(self, edit, args):
+  def run_(self, args_or_edit, args=None):
+
+    # Sublime Text 2 compatibility: In ST2, run_ is called without the second 'edit' argument
+    if args is None and args_or_edit is not None:
+      args = args_or_edit
 
     # Run the command set in the args to select the word
     system_command = args["command"] if "command" in args else None
@@ -507,8 +540,14 @@ class FileListPanel:
       self.window.open_file(entry["editorpath"] + ":" + str(entry["line"]) + ":" + str(entry["col"]), flags)
 
     else:
-      # Show the list, preview file on highlight, open file on select
-      self.window.show_quick_panel(items, self.on_select, 0, firstexternal, self.on_highlighted)
+      # Sublime Text 2 compatibility: Window.show_quick_panel has no support for on_highlighted (assume that if an exception is
+      #                               thrown it's because of a function signature mismatch)
+      try:
+        # Show the list, preview file on highlight, open file on select
+        self.window.show_quick_panel(items, self.on_select, 0, firstexternal, self.on_highlighted)
+      except:
+        # Show the list, open file on select
+        self.window.show_quick_panel(items, self.on_select)
 
 
   def on_highlighted(self, i):
