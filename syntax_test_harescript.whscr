@@ -1,0 +1,126 @@
+// SYNTAX TEST "Packages/WebHare/HareScript.sublime-syntax"
+<?wh
+// <- source.harescript
+
+LOADLIB "wh::files.whlib";
+// <- meta.loadlib.harescript
+// <- keyword.control.import.harescript
+//      ^ string.quoted.double.harescript
+
+LOADLIB 'wh::os.whlib';
+// <- meta.loadlib.harescript
+// <- keyword.control.import.harescript
+//      ^ string.quoted.single.harescript
+
+// Normal comment
+// <- comment.line.harescript
+/// Documentation comment
+// <- comment.line.documentation.harescript
+/* Normal comment
+multiline */
+// <- comment.block.harescript
+/** Documentation comment
+multiline */
+// <- comment.block.documentation.harescript
+
+"Double-quoted string '\"\x12\u1234\n /* no comment */ // still no comment";
+// <- punctuation.definition.string.begin
+ // <- string.quoted.double.harescript
+//                     ^ constant.character.escape.harescript
+//                                       ^ string.quoted.double.harescript
+//                                                        ^ string.quoted.double.harescript
+//                                                                        ^ punctuation.definition.string.end
+'Single-quoted string "\'\x12\u1234\n /* no comment */ // still no comment';
+// <- punctuation.definition.string.begin
+ // <- string.quoted.single.harescript
+//                     ^ constant.character.escape.harescript
+//                                       ^ string.quoted.single.harescript
+//                                                        ^ string.quoted.single.harescript
+//                                                                        ^ punctuation.definition.string.end
+
+1;
+// <- constant.numeric.harescript
+1i64;
+// <- constant.numeric.harescript
+1m;
+// <- constant.numeric.harescript
+1f;
+// <- constant.numeric.harescript
+1.0;
+// <- constant.numeric.harescript
+1.0m;
+// <- constant.numeric.harescript
+1.0f;
+// <- constant.numeric.harescript
+1.0123456789;
+// <- constant.numeric.harescript
+0x2468ace0;
+// <- constant.numeric.harescript
+0b10101010101010101010101010101010;
+// <- constant.numeric.harescript
+
+PUBLIC OBJECTTYPE TestObject __ATTRIBUTES__(UNKNOWNISERROR)
+// <- meta.objecttype.harescript
+// <- storage.modifier.harescript
+//     ^ storage.type.harescript
+//                ^ identifier.objecttype.harescript
+//                           ^ storage.modifier.harescript
+//                                          ^ storage.modifier.attribute.harescript
+<
+  STRING aap;
+  // <- storage.type.harescript
+
+  PUBLIC PROPERTY noot(aap, SetNoot);
+  // <- meta.property.harescript
+// ^ storage.modifier.harescript
+//       ^ keyword.harescript
+//                ^ identifier.property.harescript
+
+  MACRO NEW()
+  // <- meta.function.harescript
+  // <- keyword.harescript
+//      ^ keyword.harescript
+  {
+    this->aap := "empty";
+  }
+
+  PRIVATE MACRO SetNoot(STRING value)
+  // <- meta.function.harescript
+// ^ storage.modifier.harescript
+//        ^ keyword.harescript
+//              ^ identifier.function.harescript
+//                      ^ storage.type.harescript
+  {
+    IF (value != this->aap AND value != "uninitialized")
+//  ^ keyword.control.harescript
+//               ^ variable.language.harescript
+//                         ^ keyword.operator.harescript
+//                                       ^ string.quoted.double.harescript
+      this->aap := ToUppercase(value);
+//    ^ variable.language.harescript
+//                 ^ support.function.harescript
+    ELSE
+//  ^ keyword.control.harescript
+      THROW NEW Exception("value not initialized");
+//    ^ keyword.control.harescript
+//          ^ keyword.harescript
+//              ^ support.class.harescript
+  }
+
+  UPDATE PUBLIC FUNCTION PTR ARRAY FUNCTION GetFunctionPointers()
+  // <- storage.modifier.harescript
+//       ^ storage.modifier.harescript
+//              ^ storage.type.harescript
+//                       ^ storage.type.harescript
+//                           ^ storage.type.harescript
+//                                 ^ keyword.harescript
+//                                          ^ identifier.function.harescript
+  {
+    RETURN DEFAULT FUNCTION PTR ARRAY;
+//  ^ keyword.control.harescript
+//         ^ storage.modifier.harescript
+//                 ^ storage.type.harescript
+//                          ^ storage.type.harescript
+//                              ^ storage.type.harescript
+  }
+>;

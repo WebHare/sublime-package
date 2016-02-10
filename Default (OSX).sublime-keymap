@@ -1,0 +1,18 @@
+[
+  { "keys": ["super+alt+v"], "command": "validate_file" },
+  { "keys": ["super+alt+r"], "command": "reveal_file" },
+  { "keys": ["super+ctrl+f"], "command": "codegrep" },
+  { "keys": ["super+shift+h"], "command": "validate_harescript" },
+
+  { "keys": ["super+ctrl+shift+e"], "command": "show_stacktrace" },
+  { "keys": ["super+ctrl+e"], "command": "get_stacktrace" },
+
+  { "keys": ["super+ctrl+s"], "command": "symbol_search" },
+  { "keys": ["super+ctrl+shift+s"], "command": "symbol_search", "args": {"query": true} },
+
+  { "keys": ["super+ctrl+v"], "command": "documentation_search" },
+  { "keys": ["super+ctrl+shift+v"], "command": "documentation_search", "args": {"query": true} },
+  { "keys": ["super+ctrl+alt+v"], "command": "documentation_popup" },
+
+  { "keys": ["super+alt+t"], "command": "source_switch" }
+]

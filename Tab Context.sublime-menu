@@ -1,0 +1,8 @@
+[
+    {
+        "command": "copy_loadlib_path", "caption": "Copy Loadlib path"
+    },
+    { 
+      "command": "validate_harescript", "caption": "Validate"
+    }
+]

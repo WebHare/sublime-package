@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>name</key>
+  <string>Symbol List Component</string>
+  <key>scope</key>
+  <string>meta.component.witty</string>
+  <key>settings</key>
+  <dict>
+    <key>showInSymbolList</key>
+    <string>1</string>
+    <key>symbolTransformation</key>
+    <string>s/^(component)/\L$1/ig; s/^(.*)$/[$1]/g</string>
+  </dict>
+  <key>uuid</key>
+  <string>00C7C5F3-23D0-429A-96D9-EB49261F3A45</string>
+</dict>
+</plist>

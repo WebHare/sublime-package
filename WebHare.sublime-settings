@@ -1,0 +1,53 @@
+{
+  // Information about local WebHares
+  // An array of objects:
+  //   { "name": "flanders",                                  // The name of this peer
+  //     "peertitle": "flanders",                             // The title of this peer
+  //     "paths": [ "/Users/kris/projects/webhare/whtree",    // All local disk paths
+  //                "/Users/kris/projects/whdata/flanders/installedmodules"
+  //              ],
+  //     "ports": [ 80, 443, 8000 ],                          // All ports this peer listens on
+  //     "interface": "http://webhare.flanders.sf.b-lex.com"  // Interface root URL
+  //   }
+  "local_installs": [],
+
+  // WebDav-mounted WebHare servers, should only be filled if they cannot be found automatically!
+  // An array of objects:
+  //   { "path": "/Volumes/webhare.flanders.sf.b-lex.com"
+  //   , "url": "http://webhare.flanders.sf.b-lex.com"
+  //   }
+  "webdav_mounts": [],
+
+  // URL for the local running WebHare server, overwrite these if necessary
+  "local_interface": "http://127.0.0.1:8000",
+  "local_username": "sysop",
+  "local_password": "secret",
+
+  // WebDav mount for opening Codegrep results:
+  // "/Volumes/webhare.flanders.sf.b-lex.com/webdav/publisher"
+  "codegrep_prefix": "",
+
+  // WebDav mount for opening Codegrep module results, should normally be left empty
+  "codegrep_moduleprefix": "",
+
+  // WebDav mount for opening Codegrep standard module results, should normally be left empty
+  "codegrep_stdmoduleprefix": "",
+
+  // Set to true to do regular expression searches, only true supported at the moment
+  "codegrep_regex": true,
+
+  // Set to true to do case-sensitive searches
+  "codegrep_casesensitive": false,
+
+  // The number of lines of context to show before and after each matching line
+  "codegrep_context": 0,
+
+  // OS X only: Set to true to display a notification after Codegrep has finished a search
+  "codegrep_notify": false,
+
+  // Whether to enable online validation
+  "online_validation": true,
+
+  // Hide the SublimeLinter gutter marks while typing (i.e. while there are unvalidated changes)
+  "hide_linter_while_typing": false
+}

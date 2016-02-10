@@ -1,0 +1,14 @@
+[
+  { "caption": "WebHare: Validate File", "command": "validate_file" },
+  { "caption": "WebHare: Compile File", "command": "harescript_build", "args": { "cmd": [ "compile" ] } },
+  { "caption": "WebHare: Codegrep", "command": "codegrep" },
+  { "caption": "WebHare: Data Formatter (tollium_dev)", "command": "data_formatter" },
+  { "caption": "WebHare: Get Last Error Stack Trace", "command": "get_stacktrace" },
+  { "caption": "WebHare: Show Error Stack Trace", "command": "show_stacktrace" },
+  { "caption": "WebHare: Symbol Search", "command": "symbol_search" },
+  { "caption": "WebHare: Documentation Search", "command": "documentation_search" },
+  { "caption": "WebHare: Source Switch", "command": "source_switch" },
+  { "caption": "File: Reveal File", "command": "reveal_file" },
+  { "caption": "Bookmarks: Toggle Line", "command": "toggle_bookmark_wholeline" },
+  { "caption": "WebHare: Validate HareScript", "command": "validate_harescript" }
+]

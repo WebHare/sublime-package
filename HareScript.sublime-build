@@ -1,0 +1,16 @@
+{
+	"cmd": [ "compile" ],
+	"selector": "source.harescript",
+	"target": "harescript_build",
+
+	"variants":
+	[
+		{
+			"name": "Run",
+			"cmd": [ "runscript", "--showpath", "--workerthreads", "4", "${file}" ],
+			"file_regex": "^At [^(]+\\((?=[^)]+\\) \\((\\/[^)]+)\\))([^,]+),([^)]+)",
+			"working_dir": "${file_path}",
+			"target": "exec"
+		}
+	]
+}

@@ -1,0 +1,144 @@
+[
+    {
+        "id": "tools",
+        "children":
+        [
+            { "caption": "-" },
+            {
+                "command": "toggle_websocket",
+                "caption": "Activate WebHare WebSocket",
+                "checkbox": true
+            },
+            {
+                "caption": "WebHare Commands",
+                "id": "webhare-commands",
+                "children":
+                [
+                    {
+                        "command": "validate_file",
+                        "caption": "Validate File"
+                    },
+                    {
+                        "command": "validate_harescript",
+                        "caption": "Validate HareScript"
+                    },
+                    {
+                        "command": "harescript_build",
+                        "args":
+                        {
+                            "cmd": [ "compile" ]
+                        },
+                        "caption": "Compile File"
+                    },
+                    { "caption": "-" },
+                    {
+                        "command": "codegrep",
+                        "caption": "Codegrep"
+                    },
+                    {
+                        "command": "symbol_search",
+                        "args":
+                        {
+                            "query": true
+                        },
+                        "caption": "Symbol Search"
+                    },
+                    {
+                        "command": "symbol_search",
+                        "caption": "Symbol Search Selection"
+                    },
+                    {
+                        "command": "documentation_search",
+                        "args":
+                        {
+                            "query": true
+                        },
+                        "caption": "Documentation Search"
+                    },
+                    {
+                        "command": "documentation_search",
+                        "caption": "Documentation Search Selection"
+                    },
+                    { "caption": "-" },
+                    {
+                        "command": "get_stacktrace",
+                        "caption": "Get Last Error Stack Trace"
+                    },
+                    {
+                        "command": "show_stacktrace",
+                        "caption": "Show Error Stack Trace"
+                    },
+                    { "caption": "-" },
+                    {
+                        "command": "source_switch",
+                        "caption": "Source Switch"
+                    },
+                    {
+                        "command": "data_formatter",
+                        "caption": "Data Formatter (tollium_dev)"
+                    },
+                    {
+                        "command": "reveal_file",
+                        "caption": "Reveal File"
+                    },
+                    {
+                        "command": "toggle_bookmark_wholeline",
+                        "caption": "Toggle Line Bookmark"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "preferences",
+        "children":
+        [
+            {
+                "caption": "Package Settings",
+                "mnemonic": "P",
+                "id": "package-settings",
+                "children":
+                [
+                    {
+                        "caption": "WebHare",
+                        "children":
+                        [
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/WebHare/WebHare.sublime-settings"
+                                },
+                                "caption": "Settings – Default"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/User/WebHare.sublime-settings"
+                                },
+                                "caption": "Settings – User"
+                            },
+                            { "caption": "-" },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/WebHare/Default (OSX).sublime-keymap",
+                                    "platform": "OSX"
+                                },
+                                "caption": "Key Bindings – Default"
+                            },
+                            {
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/WebHare/Default (Windows).sublime-keymap",
+                                    "platform": "Windows"
+                                },
+                                "caption": "Key Bindings – Default"
+                            },
+                            { "caption": "-" }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

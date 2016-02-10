@@ -1,0 +1,17 @@
+[
+    {
+        "button": "button1", "count": 2,
+        "press_command": "mouse_goto_codegrep",
+        "press_args": {"command": "drag_select", "args": {"by": "words"}}
+    }
+,   {
+        "button": "button2", "count": 1, "modifiers": ["ctrl"],
+        "press_command": "mouse_documentation_popup",
+        "press_args": {"command": "drag_select" }
+    }
+,   {
+        "button": "button2", "count": 1, "modifiers": [ "ctrl", "shift" ],
+        "press_command": "mouse_symbol_search",
+        "press_args": {"command": "drag_select" }
+    }
+]

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>name</key>
+  <string>Symbol List Function</string>
+  <key>scope</key>
+  <string>meta.function.harescript</string>
+  <key>settings</key>
+  <dict>
+    <key>showInSymbolList</key>
+    <string>1</string>
+    <key>symbolTransformation</key>
+    <string>s/\bPRIVATE[\s\n]+//ig; s/^[\s\n]+//g; s/(.*)(?=\b\w+)/\U$1/ig; s/(NEW)$/\U$1/ig</string>
+  </dict>
+  <key>uuid</key>
+  <string>2C0C70BC-83CF-4DBB-B6CC-83524F1AAED7</string>
+</dict>
+</plist>
