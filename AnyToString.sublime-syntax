@@ -1,0 +1,82 @@
+%YAML 1.2
+---
+name: AnyToString
+first_line_match: (?i)^(JSON|HSON)(:)$
+scope: source.anytostring
+
+#ADDME: Some stuff within this context file is copied from HareScript.sublime-syntax. It would be cleaner if we can just
+#       include specific contexts of another syntax file, without having to support the other syntax completely.
+
+contexts:
+
+  main:
+    - match: (?i)^(JSON|HSON)(:)$
+      captures:
+        1: support.type.anytostring
+        2: punctuation.anytostring
+      push: anytostring
+
+  anytostring:
+
+    # Record (Array)
+    - match: (?i)^\s*(\+)(RECORD( ARRAY)?)(?!:)
+      captures:
+        1: punctuation.anytostring
+        2: storage.type.anytostring
+      scope: meta.type.anytostring
+
+    # Record Cell
+    - match: ^\s*(\+)([^:]+)(:)
+      captures:
+        1: punctuation.anytostring
+        2: identifier.cell.anytostring
+        3: punctuation.anytostring
+      scope: meta.cell.anytostring
+
+    # HareScript types (copied from HareScript.sublime-syntax)
+    - match: (?i)\b(ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT)\b
+      scope: storage.type.harescript
+
+    # HareScript storage modifier (copied from HareScript.sublime-syntax)
+    - match: (?i)\b(AGGREGATE|DEFAULT|PRIVATE|PTR|PUBLIC|UPDATE|__ATTRIBUTES__)\b
+      scope: storage.modifier.harescript
+
+    # String constants (copied from HareScript.sublime-syntax)
+    - match: \"
+      captures:
+        0: punctuation.definition.string.begin
+      push: dqstring
+    - match: \'
+      captures:
+        0: punctuation.definition.string.begin
+      push: sqstring
+
+    # DATETIME constants
+    - match: \b(\d+-\d{2}-\d{2})\ (\(\d+\))\ (\d{2}:\d{2}:\d{2}\.\d{3})\b
+      scope: meta.datetime.anytostring
+
+    # BLOB lengths
+    - match: \ \(\d+\ bytes\)
+      scope: comment.blob.anytostring
+
+    # Decimal (integer, money and float), hexadecimal and binary numeric constants (copied from HareScript.sublime-syntax)
+    - match: \b(\d*\.)?\d+(i(64)?|m|f)?\b|\b0x\h+\b|\b0b(0|1)+\b
+      scope: constant.numeric.harescript
+
+  # Double-quoted string constant (copied from HareScript.sublime-syntax)
+  dqstring:
+    - meta_content_scope: string.quoted.double.harescript
+    - include: escapes
+    - match: \"
+      captures:
+        0: punctuation.definition.string.end
+      pop: true
+
+  # Single-quoted string constant (copied from HareScript.sublime-syntax)
+  sqstring:
+    - meta_content_scope: string.quoted.single.harescript
+    - include: escapes
+    - match: \'
+      captures:
+        0: punctuation.definition.string.end
+      pop: true

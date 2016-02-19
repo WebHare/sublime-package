@@ -63,7 +63,7 @@ contexts:
         4: string.quoted.single.harescript
       scope: meta.loadlib.harescript
 
-    # Harescript types
+    # HareScript types
     - match: (?i)\b(ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT)\b
       scope: storage.type.harescript
 
