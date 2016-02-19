@@ -57,9 +57,9 @@ class DataFormatterThread(threading.Thread):
     # Currently, the output is either AnyToString-formatted JSON/RECORD ARRAY with errors or XML
     output_format = None
     if output.startswith("JSON:") or output.startswith("+RECORD ARRAY"):
-      output_format = "Packages/WebHare/AnyToString.tmLanguage"
+      output_format = "Packages/WebHare/AnyToString.sublime-syntax"
     elif output.startswith("<"):
-      output_format = "Packages/XML/XML.tmLanguage"
+      output_format = "Packages/XML/XML.sublime-syntax"
 
     self.set_buffer({ "text": output, "format": output_format })
 
