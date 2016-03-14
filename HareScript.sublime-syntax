@@ -64,7 +64,7 @@ contexts:
       scope: meta.loadlib.harescript
 
     # HareScript types
-    - match: (?i)\b(ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT)\b
+    - match: (?i)\b(ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT|WEAKOBJECT)\b
       scope: storage.type.harescript
 
     # HareScript keywords
@@ -72,7 +72,7 @@ contexts:
       scope: keyword.harescript
 
     # HareScript control keywords
-    - match: (?i)\b(BREAK|CASE|CATCH|CONTINUE|ELSE|FINALLY|FOR|FOREVERY|IF|GOTO|RETURN|SWITCH|THROW|TRY|WHILE)\b
+    - match: (?i)\b(AWAIT|BREAK|CASE|CATCH|CONTINUE|ELSE|FINALLY|FOR|FOREVERY|IF|GOTO|RETURN|SWITCH|THROW|TRY|WHILE|YIELD)\b
       scope: keyword.control.harescript
 
     # HareScript operator keywords
@@ -80,7 +80,7 @@ contexts:
       scope: keyword.operator.harescript
 
     # HareScript storage modifier
-    - match: (?i)\b(AGGREGATE|DEFAULT|PRIVATE|PTR|PUBLIC|UPDATE|__ATTRIBUTES__)\b
+    - match: (?i)\b(AGGREGATE|ASYNC|DEFAULT|PRIVATE|PTR|PUBLIC|UPDATE|__ATTRIBUTES__)\b
       scope: storage.modifier.harescript
 
     # HareScript attributes
