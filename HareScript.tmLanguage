@@ -161,7 +161,7 @@
 					<key>comment</key>
 					<string>HareScript type names</string>
 					<key>match</key>
-					<string>(?i)\b(ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT)\b</string>
+					<string>(?i)\b(ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT|WEAKOBJECT)\b</string>
 					<key>name</key>
 					<string>storage.type.harescript</string>
 				</dict>
@@ -177,7 +177,7 @@
 					<key>comment</key>
 					<string>HareScript control keywords</string>
 					<key>match</key>
-					<string>(?i)\b(BREAK|CASE|CATCH|CONTINUE|ELSE|FINALLY|FOR|FOREVERY|IF|GOTO|RETURN|SWITCH|THROW|TRY|WHILE)\b</string>
+					<string>(?i)\b(AWAIT|BREAK|CASE|CATCH|CONTINUE|ELSE|FINALLY|FOR|FOREVERY|IF|GOTO|RETURN|SWITCH|THROW|TRY|WHILE|YIELD)\b</string>
 					<key>name</key>
 					<string>keyword.control.harescript</string>
 				</dict>
@@ -193,7 +193,7 @@
 					<key>comment</key>
 					<string>HareScript type modifiers</string>
 					<key>match</key>
-					<string>(?i)\b(AGGREGATE|DEFAULT|PRIVATE|PTR|PUBLIC|UPDATE|__ATTRIBUTES__)\b</string>
+					<string>(?i)\b(AGGREGATE|ASYNC|DEFAULT|PRIVATE|PTR|PUBLIC|UPDATE|__ATTRIBUTES__)\b</string>
 					<key>name</key>
 					<string>storage.modifier.harescript</string>
 				</dict>
