@@ -556,6 +556,10 @@ class ValidateHarescript:
     view_settings = self.view.settings()
     if re.search(r'HareScript', view_settings.get("syntax"), re.I):
       return True
+    if re.search(r'XML', view_settings.get("syntax"), re.I):
+      return True
+    if re.search(r'Witty', view_settings.get("syntax"), re.I):
+      return True
 
     return False
 
