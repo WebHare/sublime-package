@@ -133,6 +133,10 @@ contexts:
     - match: /\*
       push: blockcomment
 
+    # HareScript operators
+    - match: "=|\\+|-|\\*|/|<|>|\\?|:"
+      scope: keyword.operator.harescript
+
 
   # Double-quoted string constant
   dqstring:
