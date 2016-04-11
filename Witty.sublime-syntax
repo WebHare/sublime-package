@@ -52,5 +52,5 @@ contexts:
   # Comment
   blockcomment:
     - meta_scope: comment.block.witty
-    - match: !(?=\])
+    - match: \!(?=\])
       pop: true

@@ -4,11 +4,12 @@
 //     ^ variable.other.witty
 //         ^ punctuation.section.embedded.end
 
-[! The main component !]
+[! The [main] component !]
 // <- punctuation.section.embedded.begin
  // <- comment.block.witty
-//                    ^ comment.block.witty
-//                     ^ punctuation.section.embedded.end
+//           ^ comment.block.witty
+//                      ^ comment.block.witty
+//                       ^ punctuation.section.embedded.end
 [component main]
 // <- punctuation.section.embedded.begin
  // <- meta.component.witty
