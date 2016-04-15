@@ -7,6 +7,7 @@
 [! The [main] component !]
 // <- punctuation.section.embedded.begin
  // <- comment.block.witty
+//         ^ comment.block.witty
 //           ^ comment.block.witty
 //                      ^ comment.block.witty
 //                       ^ punctuation.section.embedded.end
@@ -27,9 +28,13 @@
 //                                                ^ variable.language.witty
 //                                                         ^ variable.other.witty
 //                                                               ^ storage.modifier.witty
-      <p>[[ ] [gettid choice]</p>
-//             ^ keyword.witty
-//                    ^ variable.other.witty
+      <p>[[ ] [[[witty] [gettid choice]</p>
+//       ^^^^^^^ text.html.basic
+//              ^ punctuation.section.embedded.begin
+//               ^ variable.other.witty
+//                    ^ punctuation.section.embedded.end
+//                       ^ keyword.witty
+//                              ^ variable.other.witty
     </article>
   [/forevery]
 //  ^ keyword.witty

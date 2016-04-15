@@ -11,9 +11,9 @@ contexts:
     - match: ""
       push: "Packages/HTML/HTML.sublime-syntax"
       with_prototype:
-        - match: (?<=[^\[])\[(?=[^\[])|(^\[(?=[^\[]))
+        - match: (?<=[^\[]|^)(\[\[)*(\[)(?=[^\[])
           captures:
-            0: punctuation.section.embedded.begin
+            2: punctuation.section.embedded.begin
           push: witty
 
   witty:
