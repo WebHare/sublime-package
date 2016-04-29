@@ -104,7 +104,7 @@ contexts:
       scope: keyword.control.import.harescript
 
     # Decimal (integer, money and float), hexadecimal and binary numeric constants
-    - match: \b(\d*\.)?\d+(i(64)?|m|f)?\b|\b0x\h+\b|\b0b(0|1)+\b
+    - match: \b(\d*\.)?\d+(i(64)?|m|f|e[+-]?[0-9]*)?\b|\b0x\h+\b|\b0b(0|1)+\b
       scope: constant.numeric.harescript
 
     # String constants
