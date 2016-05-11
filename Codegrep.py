@@ -107,6 +107,7 @@ class CodegrepCommand(sublime_plugin.WindowCommand):
 
       # Create an environment
       current_env = os.environ.copy()
+      current_env["WEBHARE_INEDITOR"] = "1"
       if buildenv:
         current_env["PATH"] = buildenv.get("PATH", current_env["PATH"])
 
