@@ -678,3 +678,19 @@ class EraseLinterGutterMarks(sublime_plugin.EventListener):
     if self.hidelinter:
       for error_type in (highlight.WARNING, highlight.ERROR):
         view.erase_regions(highlight.GUTTER_MARK_KEY_FORMAT.format(error_type))
+
+
+def plugin_loaded():
+
+  # Set WEBHARE_INEDITOR environment variable
+  os.environ["WEBHARE_INEDITOR"] = "1"
+
+def plugin_unloaded():
+
+  # Unset WEBHARE_INEDITOR environment variable
+  del os.environ["WEBHARE_INEDITOR"]
+
+# Sublime Text 2 compatibility: Register plugin unload handler, call plugin load handler
+if sys.version_info < (3,):
+  unload_handler = plugin_unloaded
+  plugin_loaded()
