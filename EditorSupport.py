@@ -653,4 +653,5 @@ def plugin_loaded():
 def plugin_unloaded():
 
   # Unset WEBHARE_INEDITOR environment variable
-  del os.environ["WEBHARE_INEDITOR"]
+  if "WEBHARE_INEDITOR" in os.environ:
+    del os.environ["WEBHARE_INEDITOR"]
