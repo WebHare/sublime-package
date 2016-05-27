@@ -688,7 +688,8 @@ def plugin_loaded():
 def plugin_unloaded():
 
   # Unset WEBHARE_INEDITOR environment variable
-  del os.environ["WEBHARE_INEDITOR"]
+  if "WEBHARE_INEDITOR" in os.environ:
+    del os.environ["WEBHARE_INEDITOR"]
 
 # Sublime Text 2 compatibility: Register plugin unload handler, call plugin load handler
 if sys.version_info < (3,):
