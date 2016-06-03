@@ -1,0 +1,19 @@
+[
+    {
+        "command": "add_loadlib",
+        "caption": "Add Missing LOADLIB"
+    },
+    { "caption": "-" },
+    {
+        "id": "webhare",
+        "caption": "WebHare Commands",
+        "children":
+        [
+            {
+                "command": "symbol_search",
+                "caption": "Symbol Search Selection"
+            }
+
+        ]
+    }
+]

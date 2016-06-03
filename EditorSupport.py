@@ -377,7 +377,7 @@ class EditorSupportCall:
     self.browser = ServerProxy(adminurl)
 
 
-  def call(self, method, param1 = None):
+  def call(self, method, param1 = None, param2 = None):
 
     try:
       # Set (global) socket timeout globally
@@ -397,6 +397,8 @@ class EditorSupportCall:
         return self.browser.compile(self.contexturl, self.config)
       elif method == "validateharescriptsource":
         return self.browser.validateharescriptsource(self.contexturl, param1, self.config)
+      elif method == "addloadlibtosource":
+        return self.browser.rpc_addloadlibtosource(self.contexturl, param1, param2, self.config)
 
     except Error as e:
       # Display a message
@@ -431,6 +433,7 @@ class FileListPanel:
   orgview = None
   orgsel = []
   orgpos = None
+  onselect = None
 
 
   def __init__(self, window):
@@ -446,9 +449,10 @@ class FileListPanel:
       self.orgpos = self.orgview.viewport_position()
 
 
-  def show(self, entries, autoopen = False):
+  def show(self, entries, autoopen = False, onselect = None):
 
     self.entries = entries
+    self.onselect = onselect
 
     # Create the list of files in the stacktrace
     items = []
@@ -503,6 +507,11 @@ class FileListPanel:
     if (autoopen and len(items) == 1):
       # There is only 1 result and it should be opened automatically
       entry = self.entries[0]
+
+      if self.onselect != None:
+        self.onselect(entry)
+        return
+
       flags = sublime.ENCODED_POSITION
       self.window.open_file(entry["editorpath"] + ":" + str(entry["line"]) + ":" + str(entry["col"]), flags)
 
@@ -530,11 +539,14 @@ class FileListPanel:
     if i >= 0:
       entry = self.entries[i]
       if (entry["editorpath"] != "" and entry["editorpath"] != "(hidden)"):
-        # Open the selected file
-        flags = sublime.ENCODED_POSITION | (sublime.TRANSIENT if preview else 0)
-        print("open",entry["editorpath"])
-        self.window.open_file(entry["editorpath"] + ":" + str(entry["line"]) + ":" + str(entry["col"]), flags)
-        return
+        if not preview and self.onselect != None:
+          self.onselect(entry)
+        else:
+          # Open the selected file
+          flags = sublime.ENCODED_POSITION | (sublime.TRANSIENT if preview else 0)
+          print("open",entry["editorpath"])
+          self.window.open_file(entry["editorpath"] + ":" + str(entry["line"]) + ":" + str(entry["col"]), flags)
+          return
 
     # No file selected or file cannot be opened (e.g. "(hidden)"): restore focus to the originally active view (this will
     # close a currently opened preview file) and restore selection and viewport
@@ -644,6 +656,92 @@ class EraseLinterGutterMarks(sublime_plugin.EventListener):
       for error_type in (highlight.WARNING, highlight.ERROR):
         view.erase_regions(highlight.GUTTER_MARK_KEY_FORMAT.format(error_type))
 
+class AddLoadlibCommand(sublime_plugin.TextCommand):
+  def is_visible(self, event):
+    # Only work on Harescript foles
+    view_settings = self.view.settings()
+    if not re.search(r'HareScript', view_settings.get("syntax"), re.I):
+      return False
+    # Need validation data
+    data = getViewStoredData(self.view)
+    if not data or not "messages" in data:
+      return False
+
+    # Use caret position, or mouse click position if this is a click
+    pos = self.view.sel()[0].a
+    if event != None:
+      pos = self.view.window_to_text((event["x"], event["y"]));
+
+    # Get the current line, assert that there is an error
+    firstline = self.view.rowcol(pos)[0] + 1
+    for idx, obj in enumerate(data["messages"]):
+      if (obj["code"] == 139 or obj["code"] == 9 or obj["code"] == 76) and obj["line"] == firstline:
+        return True
+    return False
+  def is_enabled(self):
+    return True
+  def want_event(self):
+    return True
+
+  def run(self, edit, event):
+    print("event", edit, event)
+    # Get validation data
+    data = getViewStoredData(self.view)
+    if not data or not "messages" in data:
+      return
+
+    # Use caret position, or mouse click position if this is a click
+    pos = self.view.sel()[0].a
+    if event != None:
+      pos = self.view.window_to_text((event["x"], event["y"]));
+    firstline = self.view.rowcol(pos)[0] + 1
+
+    # Get the symbol that is missing
+    word = ""
+    for idx, obj in enumerate(data["messages"]):
+      if (obj["code"] == 139 or obj["code"] == 9 or obj["code"] == 76) and obj["line"] == firstline:
+        word = obj["msg1"]
+        break
+
+    # Get the loadlibs this symbol is exported from
+    caller = EditorSupportCall(self.view)
+    result = caller.call("symbolsearch", "\"" + word + "\"")
+
+    if result:
+      print(result)
+      if not "results" in result:
+        return
+
+      # If we have results, show them, otherwise display a message
+      resultlist = result["results"]
+      print("results", resultlist)
+      if len(resultlist) == 1:
+        self.gotselect(resultlist[0])
+      elif len(resultlist) > 1:
+        panel = FileListPanel(self.view.window())
+        self.edit = edit
+        panel.show(resultlist, False, onselect = self.gotselect)
+
+  def gotselect(self, entry):
+    self.view.run_command("add_loadlib_text", { "path": entry["path"] })
+
+
+class AddLoadlibTextCommand(sublime_plugin.TextCommand):
+  def run(self, edit, path):
+    print("run AddLoadlibTextCommand", path)
+
+    buffer_text = self.view.substr(sublime.Region(0, self.view.size()))
+
+    caller = EditorSupportCall(self.view)
+    result = caller.call("addloadlibtosource", buffer_text, path)
+    print("result", result)
+    if not result:
+      sublime.status_message("Error connecting to server")
+    elif not result["success"]:
+      sublime.status_message("Could not add loadlib to source, the top of the file might be messy")
+    else:
+      self.view.insert(edit, result["insertpos"], result["data"])
+
 
 def plugin_loaded():
 
@@ -655,3 +753,4 @@ def plugin_unloaded():
   # Unset WEBHARE_INEDITOR environment variable
   if "WEBHARE_INEDITOR" in os.environ:
     del os.environ["WEBHARE_INEDITOR"]
+
