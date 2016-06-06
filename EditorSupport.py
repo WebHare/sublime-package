@@ -657,7 +657,7 @@ class EraseLinterGutterMarks(sublime_plugin.EventListener):
         view.erase_regions(highlight.GUTTER_MARK_KEY_FORMAT.format(error_type))
 
 class AddLoadlibCommand(sublime_plugin.TextCommand):
-  def is_visible(self, event):
+  def is_visible(self, event = None):
     # Only work on Harescript foles
     view_settings = self.view.settings()
     if not re.search(r'HareScript', view_settings.get("syntax"), re.I):
