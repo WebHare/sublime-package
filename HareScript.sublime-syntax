@@ -133,6 +133,14 @@ contexts:
     - match: /\*
       push: blockcomment
 
+    # HareScript (*) operator
+    - match: \(\*\)
+      scope: keyword.operator.harescript
+
+    # HareScript preprocessor comments
+    - match: \(\*
+      push: preprocessor
+
     # HareScript operators
     - match: "=|\\+|-|\\*|/|<|>|\\?|:"
       scope: keyword.operator.harescript
@@ -171,4 +179,10 @@ contexts:
   blockcomment:
     - meta_scope: comment.block.harescript
     - match: \*/
+      pop: true
+
+  # Preprocessor comment
+  preprocessor:
+    - meta_scope: meta.preprocessor.harescript
+    - match: \*\)
       pop: true

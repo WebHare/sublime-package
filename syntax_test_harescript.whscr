@@ -2,15 +2,26 @@
 <?wh
 // <- source.harescript
 
-LOADLIB "wh::files.whlib";
+LOADLIB "module::system/database.whlib";
 // <- meta.loadlib.harescript
 // <- keyword.control.import.harescript
 //      ^ string.quoted.double.harescript
 
-LOADLIB 'wh::os.whlib';
-// <- meta.loadlib.harescript
-// <- keyword.control.import.harescript
-//      ^ string.quoted.single.harescript
+(*IFVERSION >=40500 *)
+// <- meta.preprocessor.harescript
+//            ^ meta.preprocessor.harescript
+//                   ^ meta.preprocessor.harescript
+//                    ^ source.harescript
+OpenPrimary();
+(*ELSE*)
+// <- meta.preprocessor.harescript
+//     ^ meta.preprocessor.harescript
+//      ^ source.harescript
+OpenPrivilegedPrimary();
+(*END*)
+// <- meta.preprocessor.harescript
+//    ^ meta.preprocessor.harescript
+//     ^ source.harescript
 
 // Normal comment
 // <- comment.line.harescript
@@ -58,6 +69,31 @@ multiline */
 // <- constant.numeric.harescript
 0b10101010101010101010101010101010;
 // <- constant.numeric.harescript
+
+INTEGER i := 1 + 2 - 3 * 4 / 5;
+// <- storage.type.harescript
+//        ^ keyword.operator.harescript
+//           ^ constant.numeric.harescript
+//             ^ keyword.operator.harescript
+//                 ^ keyword.operator.harescript
+//                     ^ keyword.operator.harescript
+//                         ^ keyword.operator.harescript
+
+INTEGER numfiles :=
+// <- storage.type.harescript
+//               ^ keyword.operator.harescript
+    SELECT AS INTEGER Count(*)
+//  ^ keyword.harescript
+//         ^ keyword.harescript
+//            ^ storage.type.harescript
+//                    ^ support.function.harescript
+//                         ^ keyword.operator.harescript
+      FROM system.fs_objects
+//    ^ keyword.harescript
+     WHERE parent = 1;
+//   ^ keyword.harescript
+//                ^ keyword.operator.harescript
+//                  ^ constant.numeric.harescript
 
 PUBLIC OBJECTTYPE TestObject __ATTRIBUTES__(UNKNOWNISERROR)
 // <- meta.objecttype.harescript
