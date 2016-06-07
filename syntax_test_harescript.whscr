@@ -79,21 +79,25 @@ INTEGER i := 1 + 2 - 3 * 4 / 5;
 //                     ^ keyword.operator.harescript
 //                         ^ keyword.operator.harescript
 
-INTEGER numfiles :=
+INTEGER ARRAY numfiles :=
 // <- storage.type.harescript
-//               ^ keyword.operator.harescript
-    SELECT AS INTEGER Count(*)
+//      ^ storage.type.harescript
+//                     ^ keyword.operator.harescript
+    SELECT AS INTEGER ARRAY Count(*)
 //  ^ keyword.harescript
 //         ^ keyword.harescript
 //            ^ storage.type.harescript
-//                    ^ support.function.harescript
-//                         ^ keyword.operator.harescript
+//                          ^ support.function.harescript
+//                               ^ keyword.operator.harescript
       FROM system.fs_objects
 //    ^ keyword.harescript
      WHERE parent = 1;
 //   ^ keyword.harescript
 //                ^ keyword.operator.harescript
 //                  ^ constant.numeric.harescript
+
+INTEGER minfiles := Min[](numfiles);
+//                  ^ support.function.harescript
 
 PUBLIC OBJECTTYPE TestObject __ATTRIBUTES__(UNKNOWNISERROR)
 // <- meta.objecttype.harescript
