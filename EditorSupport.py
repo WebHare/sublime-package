@@ -705,7 +705,7 @@ class AddLoadlibCommand(sublime_plugin.TextCommand):
 
     # Get the loadlibs this symbol is exported from
     caller = EditorSupportCall(self.view)
-    result = caller.call("symbolsearch", "\"" + word + "\"")
+    result = caller.call("symbolsearch", "+\"" + word + "\" +sourcetype:harescript +(type:function type:variable type:objecttype) +ispublic:true")
 
     if result:
       print(result)
@@ -741,6 +741,7 @@ class AddLoadlibTextCommand(sublime_plugin.TextCommand):
       sublime.status_message("Could not add loadlib to source, the top of the file might be messy")
     else:
       self.view.insert(edit, result["insertpos"], result["data"])
+      sublime.status_message(result["message"])
 
 
 def plugin_loaded():
