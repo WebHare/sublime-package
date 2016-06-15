@@ -10,6 +10,10 @@
         "children":
         [
             {
+                "command": "validate_file",
+                "caption": "Validate File"
+            },
+            {
                 "command": "symbol_search",
                 "caption": "Symbol Search Selection"
             }

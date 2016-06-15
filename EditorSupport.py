@@ -397,6 +397,8 @@ class EditorSupportCall:
         return self.browser.compile(self.contexturl, self.config)
       elif method == "validateharescriptsource":
         return self.browser.validateharescriptsource(self.contexturl, param1, self.config)
+      elif method == "getloadlibsuggestions":
+        return self.browser.rpc_getloadlibsuggestions(self.contexturl, param1, self.config)
       elif method == "addloadlibtosource":
         return self.browser.rpc_addloadlibtosource(self.contexturl, param1, param2, self.config)
 
@@ -705,7 +707,7 @@ class AddLoadlibCommand(sublime_plugin.TextCommand):
 
     # Get the loadlibs this symbol is exported from
     caller = EditorSupportCall(self.view)
-    result = caller.call("symbolsearch", "+\"" + word + "\" +sourcetype:harescript +(type:function type:variable type:objecttype) +ispublic:true")
+    result = caller.call("getloadlibsuggestions", word)
 
     if result:
       print(result)
