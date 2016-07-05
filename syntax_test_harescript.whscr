@@ -99,13 +99,38 @@ INTEGER ARRAY numfiles :=
 INTEGER minfiles := Min[](numfiles);
 //                  ^ support.function.harescript
 
-PUBLIC OBJECTTYPE TestObject __ATTRIBUTES__(UNKNOWNISERROR)
+OBJECTTYPE TestObject1
+// <- meta.objecttype.harescript
+// <- storage.type.harescript
+//         ^ identifier.objecttype.harescript
+<
+>;
+
+STATIC OBJECTTYPE TestObject2
 // <- meta.objecttype.harescript
 // <- storage.modifier.harescript
 //     ^ storage.type.harescript
 //                ^ identifier.objecttype.harescript
-//                           ^ storage.modifier.harescript
-//                                          ^ storage.modifier.attribute.harescript
+<
+>;
+
+
+PUBLIC STATIC OBJECTTYPE TestObject3
+// <- meta.objecttype.harescript
+// <- storage.modifier.harescript
+//     ^ storage.modifier.harescript
+//            ^ storage.type.harescript
+//                       ^ identifier.objecttype.harescript
+<
+>;
+
+PUBLIC OBJECTTYPE TestObject4 __ATTRIBUTES__(UNKNOWNISERROR)
+// <- meta.objecttype.harescript
+// <- storage.modifier.harescript
+//     ^ storage.type.harescript
+//                ^ identifier.objecttype.harescript
+//                            ^ storage.modifier.harescript
+//                                           ^ storage.modifier.attribute.harescript
 <
   STRING aap;
   // <- storage.type.harescript

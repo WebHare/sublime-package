@@ -40,11 +40,12 @@ contexts:
       scope: meta.function.harescript
 
     # Objecttype declaration
-    - match: (?i)\b((PUBLIC|PRIVATE)[\s\n]+)\b(OBJECTTYPE)[\s\n]+(\w+)
+    - match: (?i)\b((PUBLIC|PRIVATE)[\s\n]+)?(STATIC[\s\n]+)?\b(OBJECTTYPE)[\s\n]+(\w+)
       captures:
         2: storage.modifier.harescript
-        3: storage.type.harescript
-        4: identifier.objecttype.harescript
+        3: storage.modifier.harescript
+        4: storage.type.harescript
+        5: identifier.objecttype.harescript
       scope: meta.objecttype.harescript
 
     # Objecttype property
