@@ -163,11 +163,18 @@ class MouseSymbolSearch(sublime_plugin.TextCommand):
 
     # Get the selected word
     region = self.view.sel()[0]
+    line = self.view.substr(self.view.line(region.a))
     region = self.view.word(region.a)
     word = self.view.substr(region).strip()
 
     caller = EditorSupportCall(self.view)
-    result = caller.call("symbolsearch", "\"" + word + "\"")
+
+    isloadlib = re.search(r'loadlib[\s\n]*"([^"]*)"', line, re.I);
+    result = None
+    if isloadlib:
+      result = caller.call("resolveuri", isloadlib.group(1))
+    else:
+      result = caller.call("symbolsearch", "\"" + word + "\"")
 
     if result:
       print(result)
@@ -401,6 +408,8 @@ class EditorSupportCall:
         return self.browser.rpc_getloadlibsuggestions(self.contexturl, param1, self.config)
       elif method == "addloadlibtosource":
         return self.browser.rpc_addloadlibtosource(self.contexturl, param1, param2, self.config)
+      elif method == "resolveuri":
+        return self.browser.rpc_resolveuri(self.contexturl, param1, self.config)
 
     except Error as e:
       # Display a message
