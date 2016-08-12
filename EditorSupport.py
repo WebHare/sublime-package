@@ -667,6 +667,14 @@ class EraseLinterGutterMarks(sublime_plugin.EventListener):
       for error_type in (highlight.WARNING, highlight.ERROR):
         view.erase_regions(highlight.GUTTER_MARK_KEY_FORMAT.format(error_type))
 
+#  9 variable
+# 76 objecttype
+# 85 variable (dym)
+# 88 function (dym)
+#139 function
+#178 objecttype (dym)
+unknownsymbolerrorcodes = [ 9, 76, 85, 88, 139, 178 ]
+
 class AddLoadlibCommand(sublime_plugin.TextCommand):
   def is_visible(self, event = None):
     # Only work on Harescript foles
@@ -686,7 +694,7 @@ class AddLoadlibCommand(sublime_plugin.TextCommand):
     # Get the current line, assert that there is an error
     firstline = self.view.rowcol(pos)[0] + 1
     for idx, obj in enumerate(data["messages"]):
-      if (obj["code"] == 139 or obj["code"] == 9 or obj["code"] == 76) and obj["line"] == firstline:
+      if (obj["code"] in unknownsymbolerrorcodes) and obj["line"] == firstline:
         return True
     return False
   def is_enabled(self):
@@ -710,7 +718,7 @@ class AddLoadlibCommand(sublime_plugin.TextCommand):
     # Get the symbol that is missing
     word = ""
     for idx, obj in enumerate(data["messages"]):
-      if (obj["code"] == 139 or obj["code"] == 9 or obj["code"] == 76) and obj["line"] == firstline:
+      if (obj["code"] in unknownsymbolerrorcodes) and obj["line"] == firstline:
         word = obj["msg1"]
         break
 
