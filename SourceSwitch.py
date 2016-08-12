@@ -26,6 +26,22 @@ class SourceSwitchCommand(sublime_plugin.TextCommand):
       self.view.window().open_file(screen_path)
       return
 
+    # webdesign page xml, */webdesigns/*/pages/*.xml
+    result = re.search(r"(.*(\/|\\)webdesigns(\/|\\).*(\/|\\)pages(\/|\\).*)\.xml$", file_path)
+    if result:
+      library_path = result.group(1) + ".whlib"
+      if os.path.isfile(library_path):
+        self.view.window().open_file(library_path)
+      return
+
+    # webdesign page whlib, */webdesigns/*/pages/*.whlib
+    result = re.search(r"(.*(\/|\\)webdesigns(\/|\\).*(\/|\\)pages(\/|\\).*)\.whlib$", file_path)
+    if result:
+      screen_path = result.group(1) + ".xml"
+      if os.path.isfile(screen_path):
+        self.view.window().open_file(screen_path)
+      return
+
     # C/C++ source file: *.c, *.cpp
     # groups:            1     2
     result = re.search(r"(.*)\.(c|cpp)$", file_path)
