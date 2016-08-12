@@ -10,6 +10,7 @@ from .whconnconfig import load_whconn_config
 
 # The last retrieved file list
 filelist = []
+lastfilepanel = None
 
 validate_result_dict = {}
 
@@ -436,7 +437,6 @@ class EditorSupportCall:
     #ADDME: Fallback to running local 'wh' call?
 
 
-
 class FileListPanel:
 
   entries = []
@@ -445,19 +445,32 @@ class FileListPanel:
   orgsel = []
   orgpos = None
   onselect = None
+  openedfile = False
 
 
   def __init__(self, window):
 
     self.window = window
-    # Store a reference to the currently active view with its current selection and viewport, so we can restore it if no file
-    # was actually opened
-    self.orgview = self.window.active_view()
-    if self.orgview:
-      self.orgsel = []
-      for region in self.orgview.sel():
-        self.orgsel.append(region)
-      self.orgpos = self.orgview.viewport_position()
+
+    global lastfilepanel
+
+    # if we're replacing another filelistpanel, copy its original location
+    if lastfilepanel != None:
+      self.orgview = lastfilepanel.orgview
+      self.orgsel = lastfilepanel.orgsel
+      self.orgpos = lastfilepanel.orgpos
+    else:
+      # Store a reference to the currently active view with its current selection and viewport, so we can restore it if no file
+      # was actually opened
+      self.orgview = self.window.active_view()
+      if self.orgview:
+        self.orgsel = []
+        for region in self.orgview.sel():
+          self.orgsel.append(region)
+        self.orgpos = self.orgview.viewport_position()
+
+    # Now, this object is the current shown filelistpanel
+    lastfilepanel = self
 
 
   def show(self, entries, autoopen = False, onselect = None):
@@ -547,6 +560,8 @@ class FileListPanel:
 
   def openFile(self, i, preview):
 
+    global lastfilepanel
+
     if i >= 0:
       entry = self.entries[i]
       if (entry["editorpath"] != "" and entry["editorpath"] != "(hidden)"):
@@ -557,12 +572,19 @@ class FileListPanel:
           flags = sublime.ENCODED_POSITION | (sublime.TRANSIENT if preview else 0)
           print("open",entry["editorpath"])
           self.window.open_file(entry["editorpath"] + ":" + str(entry["line"]) + ":" + str(entry["col"]), flags)
+          if not preview:
+            self.openedfile = True
           return
+    else:
+      # If another file panel was opened already, forego restoring the original selection
+      if lastfilepanel != self:
+        return
+      lastfilepanel = None
+
 
     # No file selected or file cannot be opened (e.g. "(hidden)"): restore focus to the originally active view (this will
     # close a currently opened preview file) and restore selection and viewport
-    view = self.window.active_view()
-    if self.orgview and view and view.is_scratch:
+    if self.orgview and not self.openedfile:
       sel = self.orgview.sel()
       sel.clear()
       for region in self.orgsel:
