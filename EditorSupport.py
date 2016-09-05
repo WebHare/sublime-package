@@ -7,12 +7,14 @@ from urllib.parse import urlsplit, urlunsplit
 from .WebSocketSupport import run_websocket_command
 from .findbuffer import FindBuffer
 from .whconnconfig import load_whconn_config
+from .popups import show_popup
 
 # The last retrieved file list
 filelist = []
 lastfilepanel = None
 
 validate_result_dict = {}
+lintdatagetter = None
 
 
 def getViewStoredData(view, force=False):
@@ -266,7 +268,23 @@ class DocumentationPopupCommand(sublime_plugin.WindowCommand):
     word = view.substr(region).strip()
 
     # Request documentation popup content
-    run_websocket_command("documentationpopup", { "query": word })
+    caller = EditorSupportCall(self.view)
+    result = caller.call("symbolsearch", "\"" + word + "\"")
+    if result["results"]:
+      content = ""
+      for res in result["results"]:
+        if content != "":
+          content += "<br>"
+        if "commenttext" in res and res["commenttext"] != "":
+          content += res["commenttext"].replace("\n", "<br>") + """<br>"""
+        content += """<span class="storage type">""" + res["definition"].replace(" ", """&nbsp;""") + """<br></span>"""
+      #content = """
+      #  <span class="comment block documentation">/** Format a DATETIME value */</span><br><span class="storage modifier">PUBLIC</span>
+      #  <span class="storage type">STRING FUNCTION</span>
+      #  <span class="name">FormatDateTime</span>(<span class="storage type">DATETIME</span>
+      #  <span class="name">value</span>)
+      #  """
+      show_popup(content, max_width=800)
 
 # The command to call to search a symbol and show the documentation in a popup
 class MouseDocumentationPopupCommand(sublime_plugin.TextCommand):
@@ -286,8 +304,23 @@ class MouseDocumentationPopupCommand(sublime_plugin.TextCommand):
     region = self.view.word(region.a)
     word = self.view.substr(region).strip()
 
-    # Request documentation popup content
-    run_websocket_command("documentationpopup", { "query": word })
+    caller = EditorSupportCall(self.view)
+    result = caller.call("symbolsearch", "\"" + word + "\"")
+    if result["results"]:
+      content = ""
+      for res in result["results"]:
+        if content != "":
+          content += "<br>"
+        if "commenttext" in res and res["commenttext"] != "":
+          content += res["commenttext"].replace("\n", "<br>") + """<br>"""
+        content += """<span class="storage type">""" + res["definition"].replace(" ", """&nbsp;""") + """<br></span>"""
+      #content = """
+      #  <span class="comment block documentation">/** Format a DATETIME value */</span><br><span class="storage modifier">PUBLIC</span>
+      #  <span class="storage type">STRING FUNCTION</span>
+      #  <span class="name">FormatDateTime</span>(<span class="storage type">DATETIME</span>
+      #  <span class="name">value</span>)
+      #  """
+      show_popup(content, max_width=800)
 
 
 # The command to call to validate the current file
