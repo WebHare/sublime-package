@@ -49,6 +49,37 @@ multiline */
 //                                                        ^ string.quoted.single.harescript
 //                                                                        ^ punctuation.definition.string.end
 
+`Template string with ${ "aap" || `noot ${ 1234/*integer*/ }` } embedded and \`some\` \${other} $\{stuff} here`;
+// <- punctuation.definition.string.begin
+ // <- string.template.harescript
+//                    ^ keyword.other.substitution.begin
+//                     ^ keyword.other.substitution.begin
+//                      ^ source.harescript
+//                        ^ string.quoted.double.harescript
+//                             ^ keyword.operator.harescript
+//                                ^ punctuation.definition.string.begin
+//                                 ^ string.template.harescript
+//                                       ^ keyword.other.substitution.begin
+//                                         ^ constant.numeric.harescript
+//                                             ^ comment.block.harescript
+//                                                        ^ source.harescript
+//                                                         ^ keyword.other.substitution.end
+//                                                          ^ punctuation.definition.string.end
+//                                                           ^ source.harescript
+//                                                            ^ keyword.other.substitution.end
+//                                                             ^ string.template.harescript
+//                                                                           ^ constant.character.escape.harescript
+//                                                                                    ^ constant.character.escape.harescript
+//                                                                                               ^ constant.character.escape.harescript
+//                                                                                                           ^ string.template.harescript
+//                                                                                                            ^ punctuation.definition.string.end
+`first line
+second line`;
+// <- string.template.harescript
+//        ^ string.template.harescript
+//         ^ punctuation.definition.string.end
+
+
 1;
 // <- constant.numeric.harescript
 1i64;

@@ -23,10 +23,14 @@ contexts:
 
   # Main HareScript source
   harescript:
+    - include: harescript_content
     - match: \?>
       captures:
         0: punctuation.section.embedded.end
       pop: true
+
+  # HareScript content
+  harescript_content:
 
     # Function declaration
     - match: (?i)\b(((PUBLIC|PRIVATE|UPDATE)[\s\n]+){0,2})\b((((ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT)[\s\n]+)*)(FUNCTION)|(MACRO))[\s\n]+((NEW)|(\w+))(?=[\s\n]*\()
@@ -81,7 +85,7 @@ contexts:
       scope: keyword.operator.harescript
 
     # HareScript storage modifier
-    - match: (?i)\b(AGGREGATE|ASYNC|DEFAULT|PRIVATE|PTR|PUBLIC|UPDATE|__ATTRIBUTES__)\b
+    - match: (?i)\b(AGGREGATE|ASYNC|DEFAULT|PRIVATE|PTR|PUBLIC|STATIC|UPDATE|__ATTRIBUTES__)\b
       scope: storage.modifier.harescript
 
     # HareScript attributes
@@ -117,6 +121,10 @@ contexts:
       captures:
         0: punctuation.definition.string.begin
       push: sqstring
+    - match: \`
+      captures:
+        0: punctuation.definition.string.begin
+      push: templatestring
 
     # Single-line documentation comments
     - match: ///.*$
@@ -143,7 +151,7 @@ contexts:
       push: preprocessor
 
     # HareScript operators
-    - match: "=|\\+|-|\\*|/|<|>|\\?|:"
+    - match: "=|\\+|-|\\*|/|<|>|\\?|:|\\|\\|"
       scope: keyword.operator.harescript
 
 
@@ -163,6 +171,28 @@ contexts:
     - match: \'
       captures:
         0: punctuation.definition.string.end
+      pop: true
+
+  # Template string constant
+  templatestring:
+    - meta_content_scope: string.template.harescript
+    - include: escapes
+    - match: \\[\`\$\{]
+      scope: constant.character.escape.harescript
+    - match: "\\$\\{"
+      push: templateplaceholder
+      captures:
+        0: keyword.other.substitution.begin
+    - match: \`
+      captures:
+        0: punctuation.definition.string.end
+      pop: true
+
+  templateplaceholder:
+    - include: harescript_content
+    - match: \}
+      captures:
+        0: keyword.other.substitution.end
       pop: true
 
   # Escape characters within strings
