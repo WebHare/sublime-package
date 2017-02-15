@@ -189,6 +189,8 @@ contexts:
       pop: true
 
   templateplaceholder:
+    - clear_scopes: true
+    - meta_scope: source.harescript
     - include: harescript_content
     - match: \}
       captures:
