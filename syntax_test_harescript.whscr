@@ -1,11 +1,25 @@
 // SYNTAX TEST "Packages/WebHare/HareScript.sublime-syntax"
+<a href="test"></a>
 <?wh
 // <- source.harescript
+// <- punctuation.section.embedded.begin
 
 LOADLIB "module::system/database.whlib";
 // <- meta.loadlib.harescript
 // <- keyword.control.import.harescript
 //      ^ string.quoted.double.harescript
+
+?>
+// <- punctuation.section.embedded.end
+
+<a href="test"></a>
+// <- meta.tag.inline.a.html
+ // <- entity.name.tag.inline.a.html
+//       ^ string.quoted.double.html
+
+<?wh
+// <- source.harescript
+// <- punctuation.section.embedded.begin
 
 (*IFVERSION >=40500 *)
 // <- meta.preprocessor.harescript
