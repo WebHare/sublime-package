@@ -19,7 +19,7 @@ class DataFormatterCommand(sublime_plugin.TextCommand):
     buildenv = prefs.get("build_env", None)
 
     # Run runscript with the dataformatter script
-    args = [ "runscript", "modulescript::tollium_dev/tools/dataformatter.whscr", filepath ]
+    args = [ "wh", "run", "mod::tollium_dev/scripts/tools/dataformatter.whscr", filepath ]
 
     # Create an environment
     current_env = os.environ.copy()

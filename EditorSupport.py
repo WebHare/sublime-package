@@ -544,6 +544,11 @@ class FileListPanel:
         if (firstexternal < 0 and
             not (entry["filename"] == "(hidden)"
               or entry["filename"].startswith("wh::")
+              or entry["filename"].startswith("mod::consilio/")
+              or entry["filename"].startswith("mod::system/")
+              or entry["filename"].startswith("mod::publisher/")
+              or entry["filename"].startswith("mod::tollium/")
+              or entry["filename"].startswith("mod::wrd/")
               or entry["filename"].startswith("module::consilio/")
               or entry["filename"].startswith("module::system/")
               or entry["filename"].startswith("module::publisher/")
