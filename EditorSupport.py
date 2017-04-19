@@ -612,6 +612,8 @@ class FileListPanel:
           self.window.open_file(entry["editorpath"] + ":" + str(entry["line"]) + ":" + str(entry["col"]), flags)
           if not preview:
             self.openedfile = True
+            if lastfilepanel == self:
+              lastfilepanel = None
           return
     else:
       # If another file panel was opened already, forego restoring the original selection
