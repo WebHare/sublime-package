@@ -543,6 +543,7 @@ class FileListPanel:
       if "filename" in entry:
         if (firstexternal < 0 and
             not (entry["filename"] == "(hidden)"
+              or entry["filename"] == ""
               or entry["filename"].startswith("wh::")
               or entry["filename"].startswith("mod::consilio/")
               or entry["filename"].startswith("mod::system/")
@@ -558,7 +559,13 @@ class FileListPanel:
               or entry["filename"].startswith("modulescript::system/")
               or entry["filename"].startswith("modulescript::publisher/")
               or entry["filename"].startswith("modulescript::tollium/")
-              or entry["filename"].startswith("modulescript::wrd/"))):
+              or entry["filename"].startswith("modulescript::wrd/")
+              or entry["filename"].endswith("/buildbabelexternalhelpers.js")
+              or entry["filename"].endswith("/ap.js")
+              or entry["filename"].endswith("/regenerator-runtime/runtime.js")
+              or entry["filename"].endswith("/testframework.es")
+              or entry["filename"].endswith("/testframework-rte.es")
+              or entry["filename"].endswith("/testsuite.es"))):
           firstexternal = len(items)
 
       items.append(lines)
