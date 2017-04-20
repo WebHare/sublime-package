@@ -108,6 +108,34 @@
                         "children":
                         [
                             {
+                                "caption": "Recommended Packages",
+                                "children":
+                                [
+                                    {
+                                        "command": "webhare_recommended_package",
+                                        "args":
+                                        {
+                                            "package": "WebHare"
+                                        }
+                                    },
+                                    {
+                                        "command": "webhare_recommended_package",
+                                        "args":
+                                        {
+                                            "package": "SublimeLinter"
+                                        }
+                                    },
+                                    {
+                                        "command": "webhare_recommended_package",
+                                        "args":
+                                        {
+                                            "package": "SublimeLinter-contrib-hslint"
+                                        }
+                                    }
+                                ]
+                            },
+                            { "caption": "-" },
+                            {
                                 "command": "open_file", "args":
                                 {
                                     "file": "${packages}/WebHare/WebHare.sublime-settings"
