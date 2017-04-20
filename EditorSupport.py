@@ -550,6 +550,7 @@ class FileListPanel:
               or entry["filename"].startswith("mod::publisher/")
               or entry["filename"].startswith("mod::tollium/")
               or entry["filename"].startswith("mod::wrd/")
+              # Note: module:: and modulescript:: are obsolete now
               or entry["filename"].startswith("module::consilio/")
               or entry["filename"].startswith("module::system/")
               or entry["filename"].startswith("module::publisher/")

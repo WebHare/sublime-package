@@ -14,15 +14,22 @@ class SourceSwitchCommand(sublime_plugin.TextCommand):
     # groups:            1   2             3      4
     result = re.search(r"(.*)(\/|\\)screens(\/|\\)(.*)\.xml$", file_path)
     if result:
-      library_path = result.group(1) + result.group(2) + "include" + result.group(2) + "screens"  + result.group(2) + result.group(4) + ".whlib"
-      self.view.window().open_file(library_path)
+      library_path_lib = result.group(1) + result.group(2) + "lib" + result.group(2) + "screens"  + result.group(2) + result.group(4) + ".whlib"
+      library_path_include = result.group(1) + result.group(2) + "include" + result.group(2) + "screens"  + result.group(2) + result.group(4) + ".whlib"
+
+      # ADDME when the majority of modules switches to /lib/, swap the default around
+      if os.path.isfile(library_path_lib):
+        self.view.window().open_file(library_path_lib)
+      else:
+        self.view.window().open_file(library_path_include)
+
       return
 
     # Library file: */include/screens/*.whlib
-    # groups:            1   2             3             4      5
-    result = re.search(r"(.*)(\/|\\)include(\/|\\)screens(\/|\\)(.*)\.whlib$", file_path)
+    # groups:            1   2      3             4            5      6
+    result = re.search(r"(.*)(\/|\\)(include|lib)(\/|\\)screens(\/|\\)(.*)\.whlib$", file_path)
     if result:
-      screen_path = result.group(1) + result.group(2) + "screens" + result.group(2) + result.group(5) + ".xml"
+      screen_path = result.group(1) + result.group(2) + "screens" + result.group(2) + result.group(6) + ".xml"
       self.view.window().open_file(screen_path)
       return
 
