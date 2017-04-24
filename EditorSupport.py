@@ -747,7 +747,7 @@ unknownsymbolerrorcodes = [ 9, 76, 85, 88, 139, 178 ]
 
 class AddLoadlibCommand(sublime_plugin.TextCommand):
   def is_visible(self, event = None):
-    # Only work on Harescript foles
+    # Only work on Harescript files
     view_settings = self.view.settings()
     if not re.search(r'HareScript', view_settings.get("syntax"), re.I):
       return False

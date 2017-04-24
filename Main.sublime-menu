@@ -131,6 +131,13 @@
                                         {
                                             "package": "SublimeLinter-contrib-hslint"
                                         }
+                                    },
+                                    {
+                                        "command": "webhare_recommended_package",
+                                        "args":
+                                        {
+                                            "package": "SublimeLinter-contrib-eslint"
+                                        }
                                     }
                                 ]
                             },
