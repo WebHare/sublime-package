@@ -15,7 +15,7 @@ contexts:
         - match: <\?wh
           captures:
             0: punctuation.section.embedded.begin
-          push: harescript
+          set: harescript
 
         # HareScript hashbang
         - match: ^#\!.*$
