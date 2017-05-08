@@ -1,0 +1,23 @@
+<snippet>
+  <content><![CDATA[
+import test from '@webhare-system/wh/testframework';
+import { \$qS, \$qSA } from '@webhare-system/wh/testframework';
+import * as dompack from 'dompack';
+
+test.registerTests(
+  [ { loadpage: test.getTestSiteRoot()
+    }
+  , { test: function(doc,win)
+      {
+        $1
+      }
+    }
+  ]);
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>skeleton-es-test</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.js</scope>
+</snippet>
+
+

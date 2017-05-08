@@ -16,3 +16,7 @@ to github is enough to deploy. Do not forget to push the tag too!
 
 ## Debugging tips
 Remember ctrl+backquote opens the Console to see errors
+
+## Background info
+- [Completions](http://docs.sublimetext.info/en/latest/reference/completions.html)
+- [Snippets](http://docs.sublimetext.info/en/latest/extensibility/snippets.html)

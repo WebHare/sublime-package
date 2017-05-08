@@ -1,0 +1,13 @@
+<snippet>
+  <content><![CDATA[
+formdefinitions xmlns="http://www.webhare.net/xmlns/publisher/forms" gid="site.forms" library="$1">
+  <form name="$2" gid=".$2" objectname="$2Form">
+    <defaultformbuttons buttons="ok cancel" />
+  </form>
+</formdefinitions>
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>formdefinitions</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>text.xml</scope>
+</snippet>

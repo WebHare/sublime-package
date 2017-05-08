@@ -1,0 +1,19 @@
+<snippet>
+  <content><![CDATA[
+<?wh
+LOADLIB "module::system/database.whlib";
+LOADLIB "module::wrd/objectapi.whlib";
+
+OBJECT trans := OpenPrimary();
+OBJECT wrdschema := OpenWRDSchemaByName("${1:Schema name}");
+OBJECT ${2:wrdtype} := wrdschema->GetTypeByTag("${3:WRDTYPE}");
+
+trans->BeginWork();
+
+//trans->CommitWork();
+]]></content>
+  <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+  <tabTrigger>skeleton-whscr-wrd</tabTrigger>
+  <!-- Optional: Set a scope to limit where the snippet will trigger -->
+  <scope>source.harescript</scope>
+</snippet>
