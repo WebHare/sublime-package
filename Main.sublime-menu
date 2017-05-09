@@ -109,6 +109,7 @@
                         [
                             {
                                 "caption": "Recommended Packages",
+                                "id": "webhare-recommended",
                                 "children":
                                 [
                                     {
@@ -116,28 +117,37 @@
                                         "args":
                                         {
                                             "package": "WebHare"
-                                        }
+                                        },
+                                        "checkbox": true
                                     },
                                     {
                                         "command": "webhare_recommended_package",
                                         "args":
                                         {
                                             "package": "SublimeLinter"
-                                        }
+                                        },
+                                        "checkbox": true
                                     },
                                     {
                                         "command": "webhare_recommended_package",
                                         "args":
                                         {
                                             "package": "SublimeLinter-contrib-hslint"
-                                        }
+                                        },
+                                        "checkbox": true
                                     },
                                     {
                                         "command": "webhare_recommended_package",
                                         "args":
                                         {
                                             "package": "SublimeLinter-contrib-eslint"
-                                        }
+                                        },
+                                        "checkbox": true
+                                    },
+                                    { "caption": "-" },
+                                    {
+                                        "command": "webhare_install_recommended_packages",
+                                        "caption": "Install all recommended packages"
                                     }
                                 ]
                             },
