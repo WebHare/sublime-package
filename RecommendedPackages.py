@@ -31,31 +31,31 @@ class WebhareRecommendedPackageCommand(sublime_plugin.WindowCommand, ExistingPac
 
 
     def is_enabled(self, package):
+        # pylint: disable=arguments-differ
 
         """
         The command is enabled if the package is not yet installed
         """
-        # pylint: disable=arguments-differ
 
         return not self.package_installed(package)
 
 
     def is_checked(self, package):
+        # pylint: disable=arguments-differ
 
         """
         The command is checked if the package is installed
         """
-        # pylint: disable=arguments-differ
 
         return self.package_installed(package)
 
 
     def description(self, package):
+        # pylint: disable=arguments-differ
 
         """
         Use the package name with its version as the menu item caption
         """
-        # pylint: disable=arguments-differ
 
         for package_info in self.package_list:
             if package_info[0] == package:
@@ -64,14 +64,15 @@ class WebhareRecommendedPackageCommand(sublime_plugin.WindowCommand, ExistingPac
 
 
     def run(self, package):
+        # pylint: disable=arguments-differ
 
         """
         Installs the package
         """
-        # pylint: disable=arguments-differ
 
         # Check if not already installed
         if not self.package_installed(package):
+
             if package in self.disable_packages(package, 'install'):
                 def on_complete():
                     # pylint: disable=missing-docstring
@@ -143,11 +144,14 @@ class WebhareInstallRecommendedPackagesCommand(sublime_plugin.WindowCommand, Exi
 
             package = None
             for item in menu["children"]:
+
                 # Check if it's a recommended package command
                 if "command" in item and item["command"] == "webhare_recommended_package" and "args" in item:
                     package = item["args"]["package"]
+
                     # Check if not already installed
                     if not self.package_installed(package):
+
                         if package in self.disable_packages(package, 'install'):
                             def on_complete():
                                 # pylint: disable=missing-docstring
