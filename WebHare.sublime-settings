@@ -48,6 +48,10 @@
   // Whether to enable online validation
   "online_validation": true,
 
+  // The browser to use to show online documentation, leave empty for default
+  // Possible values include "chrome", "firefox" and "safari", see https://docs.python.org/3/library/webbrowser.html
+  "documentation_browser": "",
+
   // Hide the SublimeLinter gutter marks while typing (i.e. while there are unvalidated changes)
   "hide_linter_while_typing": false
 }

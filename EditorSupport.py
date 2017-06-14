@@ -248,8 +248,17 @@ class DocumentationSearchCommand(sublime_plugin.WindowCommand):
 
       # If we have a url, open it, otherwise display a message
       if result["url"]:
-        webbrowser.open_new(result["url"])
-        sublime.status_message("")
+        # Read preferences
+        prefs = sublime.load_settings("WebHare.sublime-settings")
+        docbrowser = prefs.get("documentation_browser", "")
+        if not docbrowser:
+          docbrowser = None
+        controller = webbrowser.get(docbrowser)
+        if controller:
+          controller.open_new(result["url"])
+          sublime.status_message("")
+        else:
+          sublime.status_message("Unknown browser '" + docbrowser + "'")
       else:
         sublime.status_message("No results to show for '" + word + "'")
 
