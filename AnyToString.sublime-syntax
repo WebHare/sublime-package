@@ -19,7 +19,7 @@ contexts:
   anytostring:
 
     # Record (Array)
-    - match: (?i)^\s*(\+)(RECORD( ARRAY)?)(?!:)
+    - match: (?i)^\s*(\+)(RECORD\b( ARRAY)?)(?!:)
       captures:
         1: punctuation.anytostring
         2: storage.type.anytostring
@@ -32,6 +32,10 @@ contexts:
         2: identifier.cell.anytostring
         3: punctuation.anytostring
       scope: meta.cell.anytostring
+
+    # HareScript keywords (copied from HareScript.sublime-syntax)
+    - match: (?i)\b(DELETE|FUNCTION|INSERT|MACRO|SELECT|ALL|AS|ASC|AT|BY|CELL|COLUMN|CLASSTYPE|CROSS|DEFAULTSTO|DESC|DISTINCT|END|EXCEPT|EXPORT|EXTEND|EXTENDSFROM|FALSE|FROM|FULL|GROUP|HAVING|INDEX|INNER|INTERSECT|INTO|JOIN|KEY|LIMIT|MEMBER|NEW|NULL|NVL|OFFSET|ONLY|ORDER|OUTER|PROPERTY|SET|TEMPORARY|TRUE|UNIQUE|USING|VALUES|VAR|VARTYPE|WHERE)\b
+      scope: keyword.harescript
 
     # HareScript types (copied from HareScript.sublime-syntax)
     - match: (?i)\b(ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT)\b
@@ -46,10 +50,6 @@ contexts:
       captures:
         0: punctuation.definition.string.begin
       push: dqstring
-    - match: \'
-      captures:
-        0: punctuation.definition.string.begin
-      push: sqstring
 
     # DATETIME constants
     - match: \b(\d+-\d{2}-\d{2})\ (\(\d+\))\ (\d{2}:\d{2}:\d{2}\.\d{3})\b
@@ -72,11 +72,7 @@ contexts:
         0: punctuation.definition.string.end
       pop: true
 
-  # Single-quoted string constant (copied from HareScript.sublime-syntax)
-  sqstring:
-    - meta_content_scope: string.quoted.single.harescript
-    - include: escapes
-    - match: \'
-      captures:
-        0: punctuation.definition.string.end
-      pop: true
+  # Escape characters within strings
+  escapes:
+    - match: \\[abfnrt\'\"\\]|\\[0-7]{3}|\\x\h{2}|\\u\h{4}
+      scope: constant.character.escape.harescript

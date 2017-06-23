@@ -20,14 +20,20 @@
 // ^ keyword.witty
 //          ^ variable.other.witty
     <article>
-      <h1 class="[if first]first[else]next[/if]">[seqnr]. [title:none]</h1>
+      <h1 class="[if first]first[else]next[/if]" aap="noot">[seqnr]. [title:none]</h1>
+//     ^ entity.name.tag.block.any.html
+//        ^ entity.other.attribute-name.class.html
 //                ^ keyword.witty
 //                   ^ variable.language.witty
+//                         ^ string.quoted.double.html
 //                               ^ keyword.witty
+//                                    ^ string.quoted.double.html
 //                                          ^ keyword.witty
-//                                                ^ variable.language.witty
-//                                                         ^ variable.other.witty
-//                                                               ^ storage.modifier.witty
+//                                               ^ entity.other.attribute-name.html
+//                                                    ^ string.quoted.double.html
+//                                                           ^ variable.language.witty
+//                                                                    ^ variable.other.witty
+//                                                                          ^ storage.modifier.witty
       <p>[[ ] [[[witty] [gettid choice]</p>
 //       ^^^^^^^ text.html.basic
 //              ^ punctuation.section.embedded.begin
@@ -35,6 +41,18 @@
 //                    ^ punctuation.section.embedded.end
 //                       ^ keyword.witty
 //                              ^ variable.other.witty
+      [if image]<img src="[image]" [if width]width="[width]px"[/if]/>[/if]
+//     ^ keyword.witty
+//        ^ variable.other.witty
+//               ^ entity.name.tag.inline.any.html
+//                   ^ entity.other.attribute-name.html
+//                         ^ variable.other.witty
+//                                  ^ keyword.witty
+//                                     ^ variable.other.witty
+//                                           ^ entity.other.attribute-name.html
+//                                                   ^ variable.other.witty
+//                                                         ^ string.quoted.double.html
+//                                                              ^ keyword.witty
     </article>
   [/forevery]
 //  ^ keyword.witty

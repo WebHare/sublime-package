@@ -1,0 +1,48 @@
+// SYNTAX TEST "Packages/WebHare/AnyToString.sublime-syntax"
+HSON:
+// <- support.type.anytostring
+//  ^ punctuation.anytostring
++RECORD
+// <- punctuation.anytostring
+ // <- storage.type.anytostring
+  +STRINGFIELD: "This is a string\n"
+//^ punctuation.anytostring
+// ^ identifier.cell.anytostring
+//            ^ punctuation.anytostring
+//              ^ punctuation.definition.string.begin
+//               ^ string.quoted.double.harescript
+//                               ^^ constant.character.escape.harescript
+//                                 ^ punctuation.definition.string.end
+  +INTEGERFIELD: 12345678901234567890
+//^ punctuation.anytostring
+// ^ identifier.cell.anytostring
+//               ^ constant.numeric.harescript
+  +BOOLEANFIELD: TRUE
+//^ punctuation.anytostring
+// ^ identifier.cell.anytostring
+//               ^ keyword.harescript
+  +DATEFIELD: 2001-01-01 (1) 12:34:56.789
+//^ punctuation.anytostring
+// ^ identifier.cell.anytostring
+//            ^ meta.datetime.anytostring
+//                ^ meta.datetime.anytostring
+//                      ^ meta.datetime.anytostring
+//                                      ^ meta.datetime.anytostring
+  +RECORDFIELD: DEFAULT RECORD
+//^ punctuation.anytostring
+// ^ identifier.cell.anytostring
+//              ^ storage.modifier.harescript
+//                      ^ storage.type.harescript
+  +BLOBFIELD: BLOB (1234 bytes)
+//^ punctuation.anytostring
+// ^ identifier.cell.anytostring
+//            ^ storage.type.harescript
+//                 ^ comment.blob.anytostring
+//                  ^ comment.blob.anytostring
+//                            ^ comment.blob.anytostring
+  +ARRAYFIELD: DEFAULT RECORD ARRAY
+//^ punctuation.anytostring
+// ^ identifier.cell.anytostring
+//              ^ storage.modifier.harescript
+//                      ^ storage.type.harescript
+//                            ^ storage.type.harescript

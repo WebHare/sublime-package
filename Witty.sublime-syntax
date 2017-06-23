@@ -14,7 +14,7 @@ contexts:
         - match: (?<=[^\[]|^)(\[\[)*(\[)(?=[^\[])
           captures:
             2: punctuation.section.embedded.begin
-          set: witty
+          push: witty
 
   witty:
     - match: \]
