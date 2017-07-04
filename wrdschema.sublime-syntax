@@ -1,0 +1,11 @@
+%YAML 1.2
+---
+name: WRDSchema
+file_extensions: [ wrdschema.xml ]
+scope: source.wrdschema
+
+contexts:
+
+  main:
+    - match: ""
+      push: "Packages/XML/XML.sublime-syntax"

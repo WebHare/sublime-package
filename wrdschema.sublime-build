@@ -1,0 +1,16 @@
+{
+  "cmd": [ "compile" ],
+  "selector": "source.wrdschema",
+  "target": "wrdschema_build",
+
+  "variants":
+  [
+    {
+      "name": "Run",
+      "cmd": [ "wh", "wrd", "applyschema", "${file}" ],
+      "file_regex": "^([^:]+):(\\d+):(\\d+): (.*)",
+      "working_dir": "${file_path}",
+      "target": "exec"
+    }
+  ]
+}
