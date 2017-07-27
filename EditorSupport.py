@@ -332,41 +332,6 @@ class MouseDocumentationPopupCommand(sublime_plugin.TextCommand):
       show_popup(content, max_width=800)
 
 
-# The command to call to validate the current file
-class ValidateFileCommand(sublime_plugin.WindowCommand):
-
-  def run(self):
-
-    # Get the error list and save the stacktrace
-    sublime.status_message("Validating")
-    caller = EditorSupportCall(self.window.active_view())
-    result = caller.call("validate")
-
-    if result:
-      print(result)
-      if not "errors" in result and not "warnings" in result:
-        # Display a message
-        sublime.status_message("No validation results received")
-        return
-
-      # If we have errors and/or warnings, show them, otherwise display a message
-      results = []
-      if "errors" in result:
-        results = results + result["errors"]
-      if "warnings" in result:
-        results = results + result["warnings"]
-      if len(results) > 0:
-        # Prepend the message with either "Error: " or "Warning: "
-        for idx, obj in enumerate(results):
-          results[idx]["message"] = ("Error: " if "iserror" in obj and obj["iserror"] else "Warning: " if "iserror" in obj else "") + obj["message"]
-        sublime.status_message("")
-        panel = FileListPanel(self.window)
-        panel.show(results)
-      else:
-        sublime.status_message("Validated successfully")
-
-
-
 # The command to call to build the current file
 class HarescriptBuildCommand(sublime_plugin.WindowCommand):
 
@@ -714,17 +679,17 @@ class ValidateHarescript:
       data["supported"] = False
 
 
-# The command to call to search a symbol and show the results
-class ValidateHarescriptCommand(sublime_plugin.TextCommand):
+# The command to call to manually validate
+class ValidateFileCommand(sublime_plugin.TextCommand):
 
   def is_visible(self):
     cmd = ValidateHarescript()
     return cmd.is_enabled(self.view)
+
   def is_enabled(self):
     return True
 
   def run(self, edit):
-
     cmd = ValidateHarescript()
     cmd.run(self.view)
 

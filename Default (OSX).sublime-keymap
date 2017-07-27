@@ -2,7 +2,6 @@
   { "keys": ["super+alt+v"], "command": "validate_file" },
   { "keys": ["super+alt+r"], "command": "reveal_file" },
   { "keys": ["super+ctrl+f"], "command": "codegrep" },
-  { "keys": ["super+shift+h"], "command": "validate_harescript" },
 
   { "keys": ["super+ctrl+shift+e"], "command": "show_stacktrace" },
   { "keys": ["super+ctrl+e"], "command": "get_stacktrace" },

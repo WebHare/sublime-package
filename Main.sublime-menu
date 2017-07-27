@@ -19,10 +19,6 @@
                         "caption": "Validate File"
                     },
                     {
-                        "command": "validate_harescript",
-                        "caption": "Validate HareScript"
-                    },
-                    {
                         "command": "harescript_build",
                         "args":
                         {
