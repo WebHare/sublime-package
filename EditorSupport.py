@@ -1,9 +1,9 @@
 import sublime, sublime_plugin
-import copy, os, re, socket, subprocess, sys, webbrowser
+import copy, json, os, re, socket, subprocess, sys, webbrowser
 from threading import Timer
 from SublimeLinter.lint import highlight
 from xmlrpc.client import ServerProxy, Error
-from urllib.parse import urlsplit, urlunsplit
+from urllib.parse import urlsplit, urlunsplit, quote_plus
 from .WebSocketSupport import run_websocket_command
 from .findbuffer import FindBuffer
 from .whconnconfig import load_whconn_config
@@ -16,6 +16,9 @@ lastfilepanel = None
 validate_result_dict = {}
 lintdatagetter = None
 
+
+def storeLinterDataGetter(getter):
+  lintdatagetter = getter
 
 def getViewStoredData(view, force=False):
   global validate_result_dict
@@ -315,7 +318,7 @@ class MouseDocumentationPopupCommand(sublime_plugin.TextCommand):
 
     caller = EditorSupportCall(self.view)
     result = caller.call("symbolsearch", "\"" + word + "\"")
-    if result["results"]:
+    if result and result["results"]:
       content = ""
       for res in result["results"]:
         if content != "":
@@ -379,18 +382,71 @@ class EditorSupportCall:
 
 
   def __init__(self, view):
+    if not view:
+      print("view not set")
+    if not view.file_name:
+      print("view no filename set")
+    if not load_whconn_config:
+      print("no load_whconn_config")
 
-    # Load the connection settings, use the file path of the active view for context
-    whfsroot, username, password, contexturl, config = load_whconn_config(view.file_name())
+    havefileconfig, fileconfig = self.getfileconfig(view.file_name())
+    if havefileconfig:
+      whfsroot, username, password, contexturl, config = fileconfig
+    else:
+      # Load the connection settings, use the file path of the active view for context
+      whfsroot, username, password, contexturl, config = load_whconn_config(view.file_name())
+
     self.contexturl = contexturl
     self.config = config
-    print(self.contexturl, self.config)
 
     # Construct the RPC url and setup a server proxy for the RPC calls
     up = urlsplit(whfsroot)
-    adminurl = urlunsplit((up.scheme, username + ":" + password + "@" + up.netloc, "/wh_services/blex_alpha/editorsupport", "", ""))
-    self.browser = ServerProxy(adminurl)
+    self.adminurl = urlunsplit((up.scheme, quote_plus(username) + ":" + quote_plus(password) + "@" + up.netloc, "/wh_services/blex_alpha/editorsupport", "", ""))
+    self.browser = ServerProxy(self.adminurl)
 
+  def getfileconfig(self, filename):
+    curr = filename
+    maxdepth = 20
+
+    if not curr:
+      return False, None
+
+    while --maxdepth > 0 and curr != "/":
+      curr = os.path.normpath(os.path.join(curr, ".."))
+      testfile = os.path.join(curr, ".wh.connectinfo")
+      res, tryfile, config = self.readfileconfig(filename, testfile)
+      if res:
+        if tryfile:
+          res2, tryfile2, config2 = self.readfileconfig(filename, tryfile)
+          if res2:
+            return True, config2
+        return True, config
+    return False, None
+
+  def readfileconfig(self, filename, testfile):
+    if os.path.isfile(testfile):
+      with open(testfile) as data_file:
+        print("found config file at", testfile)
+        data = json.load(data_file)
+
+        tryfile = data["tryfile"] if "tryfile" in data else ""
+        whfsroot = data["url"]
+        username = data["user"]
+        password = data["password"]
+        contexturl = filename
+        port = urlsplit(whfsroot).port
+        config = { "local_interface": whfsroot
+                 , "localinstalls":
+                    [ { "name": "local"
+                      , "peertitle": ""
+                      , "paths": [ os.path.normpath(os.path.join(testfile, "..")) ]
+                      , "ports": [ port ]
+                      , "interface": whfsroot
+                      }
+                    ]
+                 }
+        return True, tryfile, ( whfsroot, username, password, contexturl, config )
+    return False, None, None
 
   def call(self, method, param1 = None, param2 = None):
 
@@ -428,13 +484,13 @@ class EditorSupportCall:
     except IOError as e:
       # Display a message
       sublime.status_message("Error connecting to server")
-      print("IOError", e)
+      print("IOError", e, self.adminurl)
       return None
 
     except socket.error as e:
       # Display a message
       sublime.status_message("Error connecting to server")
-      print("socket.error", e)
+      print("socket.error", e, self.adminurl)
       return None
 
     finally:
