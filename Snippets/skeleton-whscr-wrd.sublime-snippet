@@ -1,8 +1,11 @@
 <snippet>
   <content><![CDATA[
 <?wh
+
 LOADLIB "module::system/database.whlib";
+
 LOADLIB "module::wrd/objectapi.whlib";
+
 
 OBJECT trans := OpenPrimary();
 OBJECT wrdschema := OpenWRDSchemaByName("${1:Schema name}");

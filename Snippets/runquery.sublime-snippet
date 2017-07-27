@@ -1,10 +1,10 @@
 <snippet>
   <content><![CDATA[
 RunQuery(
-  [ outputcolumns := [ $1 ]
-  , filters := [[ $2 ]
-               ]
-  ]);
+    [ outputcolumns := [ $1 ]
+    , filters := [ [ field := "$2", value := $3 ]
+                 ]
+    ]);
 ]]></content>
   <!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
   <tabTrigger>RunQuery</tabTrigger>
