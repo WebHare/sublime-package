@@ -10,5 +10,4 @@
   { "caption": "WebHare: Source Switch", "command": "source_switch" },
   { "caption": "File: Reveal File", "command": "reveal_file" },
   { "caption": "Bookmarks: Toggle Line", "command": "toggle_bookmark_wholeline" },
-  { "caption": "WebHare: Validate HareScript", "command": "validate_harescript" }
 ]
