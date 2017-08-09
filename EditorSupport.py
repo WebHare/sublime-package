@@ -415,7 +415,7 @@ class EditorSupportCall:
       self.basedir = basedir
       self.accesstoken = accesstoken
       self.translateinfo = translateinfo
-      transport = CustomSafeTransport(self.accesstoken) if editorservice.startsWith("https:") else CustomTransport(self.accesstoken)
+      transport = CustomSafeTransport(self.accesstoken) if editorservice.startswith("https:") else CustomTransport(self.accesstoken)
       self.editorservice = ServerProxy(editorservice, transport)
       self.reldir = reldir
     else:
