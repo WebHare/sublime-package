@@ -2,11 +2,9 @@ import sublime, sublime_plugin
 import copy, json, os, re, socket, subprocess, sys, webbrowser, time
 from threading import Timer
 from SublimeLinter.lint import highlight
-from xmlrpc.client import ServerProxy, Error, Transport
+from xmlrpc.client import ServerProxy, Error, Transport, SafeTransport
 from urllib.parse import urlsplit, urlunsplit, quote_plus
-from .WebSocketSupport import run_websocket_command
 from .findbuffer import FindBuffer
-from .whconnconfig import load_whconn_config
 from .popups import show_popup
 
 # The last retrieved file list
@@ -384,6 +382,17 @@ class CustomTransport(Transport):
     connection.putheader("Authorization", "Bearer " + self.accesstoken)
     super().send_headers(connection, headers)
 
+# Transport which adds an bearer access token in the authentication header
+class CustomSafeTransport(SafeTransport):
+
+  def __init__(self, accesstoken):
+    super().__init__()
+    self.accesstoken = accesstoken
+
+  def send_headers(self, connection, headers):
+    connection.putheader("Authorization", "Bearer " + self.accesstoken)
+    super().send_headers(connection, headers)
+
 
 class EditorSupportCall:
 
@@ -406,7 +415,8 @@ class EditorSupportCall:
       self.basedir = basedir
       self.accesstoken = accesstoken
       self.translateinfo = translateinfo
-      self.editorservice = ServerProxy(editorservice, CustomTransport(self.accesstoken))
+      transport = CustomSafeTransport(self.accesstoken) if editorservice.startsWith("https:") else CustomTransport(self.accesstoken)
+      self.editorservice = ServerProxy(editorservice, transport)
       self.reldir = reldir
     else:
       sublime.status_message("Could not locate connection info")

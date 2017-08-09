@@ -5,11 +5,6 @@
         [
             { "caption": "-" },
             {
-                "command": "toggle_websocket",
-                "caption": "Activate WebHare WebSocket",
-                "checkbox": true
-            },
-            {
                 "caption": "WebHare Commands",
                 "id": "webhare-commands",
                 "children":
