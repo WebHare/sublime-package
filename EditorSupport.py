@@ -1,8 +1,8 @@
 import sublime, sublime_plugin
-import copy, json, os, re, socket, subprocess, sys, webbrowser
+import copy, json, os, re, socket, subprocess, sys, webbrowser, time
 from threading import Timer
 from SublimeLinter.lint import highlight
-from xmlrpc.client import ServerProxy, Error
+from xmlrpc.client import ServerProxy, Error, Transport
 from urllib.parse import urlsplit, urlunsplit, quote_plus
 from .WebSocketSupport import run_websocket_command
 from .findbuffer import FindBuffer
@@ -373,107 +373,121 @@ class HarescriptBuildCommand(sublime_plugin.WindowCommand):
         sublime.status_message("Built successfully without errors or warnings")
 
 
+# Transport which adds an bearer access token in the authentication header
+class CustomTransport(Transport):
+
+  def __init__(self, accesstoken):
+    super().__init__()
+    self.accesstoken = accesstoken
+
+  def send_headers(self, connection, headers):
+    connection.putheader("Authorization", "Bearer " + self.accesstoken)
+    super().send_headers(connection, headers)
+
 
 class EditorSupportCall:
 
-  contexturl = ""
-  config = {}
-  browser = None
-
+  basedir = None
+  accesstoken = None
+  editorservice = None
+  translateinfo = None
+  editorservice = None
+  reldir = None
 
   def __init__(self, view):
     if not view:
       print("view not set")
     if not view.file_name:
       print("view no filename set")
-    if not load_whconn_config:
-      print("no load_whconn_config")
 
-    havefileconfig, fileconfig = self.getfileconfig(view.file_name())
+    havefileconfig, basedir, reldir, config = self.getfileconfig(view.file_name())
     if havefileconfig:
-      whfsroot, username, password, contexturl, config = fileconfig
+      accesstoken, editorservice, translateinfo = config
+      self.basedir = basedir
+      self.accesstoken = accesstoken
+      self.translateinfo = translateinfo
+      self.editorservice = ServerProxy(editorservice, CustomTransport(self.accesstoken))
+      self.reldir = reldir
     else:
-      # Load the connection settings, use the file path of the active view for context
-      whfsroot, username, password, contexturl, config = load_whconn_config(view.file_name())
-
-    self.contexturl = contexturl
-    self.config = config
-
-    # Construct the RPC url and setup a server proxy for the RPC calls
-    up = urlsplit(whfsroot)
-    self.adminurl = urlunsplit((up.scheme, quote_plus(username) + ":" + quote_plus(password) + "@" + up.netloc, "/wh_services/blex_alpha/editorsupport", "", ""))
-    self.browser = ServerProxy(self.adminurl)
+      sublime.status_message("Could not locate connection info")
 
   def getfileconfig(self, filename):
     curr = filename
     maxdepth = 20
 
     if not curr:
-      return False, None
+      return False, None, None, None
 
-    while --maxdepth > 0 and curr != "/":
-      curr = os.path.normpath(os.path.join(curr, ".."))
+    # Keep only the directory from the filename
+    curr = os.path.normpath(os.path.join(curr, ".."))
+
+    webdavinfoname = ".wh.webdavinfo-" + str(int(time.time()))
+    for file in os.listdir(curr):
+      if re.match(r"^\.wh\.webdavinfo.*", file):
+        webdavinfoname = file
+
+    testfile = os.path.join(curr, webdavinfoname)
+    res, config = self.readfileconfig(filename, testfile)
+    if res:
+      reldir = os.path.relpath(filename, curr)
+      return True, curr, reldir, config
+
+    # Search for .wh.connectinfo, recursively
+    while --maxdepth > 0:
       testfile = os.path.join(curr, ".wh.connectinfo")
-      res, tryfile, config = self.readfileconfig(filename, testfile)
+      res, config = self.readfileconfig(filename, testfile)
       if res:
-        if tryfile:
-          res2, tryfile2, config2 = self.readfileconfig(filename, tryfile)
-          if res2:
-            return True, config2
-        return True, config
-    return False, None
+        reldir = os.path.relpath(filename, curr)
+        return True, curr, reldir, config
+      if curr == "/":
+        break
+      curr = os.path.normpath(os.path.join(curr, ".."))
+    return False, None, None, None
 
   def readfileconfig(self, filename, testfile):
     if os.path.isfile(testfile):
       with open(testfile) as data_file:
         print("found config file at", testfile)
+        print("contents", data_file)
         data = json.load(data_file)
 
-        tryfile = data["tryfile"] if "tryfile" in data else ""
-        whfsroot = data["url"]
-        username = data["user"]
-        password = data["password"]
-        contexturl = filename
-        port = urlsplit(whfsroot).port
-        config = { "local_interface": whfsroot
-                 , "localinstalls":
-                    [ { "name": "local"
-                      , "peertitle": ""
-                      , "paths": [ os.path.normpath(os.path.join(testfile, "..")) ]
-                      , "ports": [ port ]
-                      , "interface": whfsroot
-                      }
-                    ]
-                 }
-        return True, tryfile, ( whfsroot, username, password, contexturl, config )
-    return False, None, None
+        accesstoken = data["accesstoken"]
+        editorservice = data["editorservice"]
+        translateinfo = data["translateinfo"]
+
+        # addme use validuntil for caching
+        return True, ( accesstoken, editorservice, translateinfo )
+
+    return False, None
 
   def call(self, method, param1 = None, param2 = None):
+    if not self.editorservice:
+      return None
 
     try:
       # Set (global) socket timeout globally
       socket.setdefaulttimeout(10)
 
       # Call the remote function and return the result
+      retval = None
       if method == "getremoteerrorlist":
-        return self.browser.getRemoteErrorList(self.contexturl, self.config)
+        retval = self.editorservice.getRemoteErrorList(self.translateinfo, self.reldir)
       elif method == "symbolsearch":
-        return self.browser.symbolSearch(param1, self.contexturl, self.config)
+        retval = self.editorservice.symbolsearch(self.translateinfo, self.reldir, param1)
       elif method == "documentationsearch":
-        return self.browser.documentationSearch(param1, self.contexturl, self.config)
-      elif method == "validate":
-        return self.browser.validate(self.contexturl, self.config)
-      elif method == "compile":
-        self.config["force"] = True
-        return self.browser.compile(self.contexturl, self.config)
+        retval = self.editorservice.documentationSearch(self.translateinfo, self.reldir, param1)
       elif method == "validateharescriptsource":
-        return self.browser.validateharescriptsource(self.contexturl, param1, self.config)
+        retval = self.editorservice.validate(self.translateinfo, self.reldir, param1)
       elif method == "getloadlibsuggestions":
-        return self.browser.rpc_getloadlibsuggestions(self.contexturl, param1, self.config)
+        retval = self.editorservice.getloadlibsuggestions(self.translateinfo, self.reldir, param1)
       elif method == "addloadlibtosource":
-        return self.browser.rpc_addloadlibtosource(self.contexturl, param1, param2, self.config)
+        retval = self.editorservice.addloadlibtosource(self.translateinfo, self.reldir, param1, param2)
       elif method == "resolveuri":
-        return self.browser.rpc_resolveuri(self.contexturl, param1, self.config)
+        retval = self.editorservice.resolveuri(self.translateinfo, self.reldir, param1)
+
+      # Make absolute paths from editorpaths, they are now relative to self.basedir
+      self.translateEditorPaths(retval)
+      return retval;
 
     except Error as e:
       # Display a message
@@ -498,6 +512,20 @@ class EditorSupportCall:
       socket.setdefaulttimeout(None)
 
     #ADDME: Fallback to running local 'wh' call?
+
+  # recurse through whore retval, make all editorpath paths absolute, wrt to this.basedir
+  def translateEditorPaths(self, data):
+    if isinstance(data, dict):
+      for k, v in data.items():
+        if k == "editorpath" and v != "":
+          data[k] = os.path.join(self.basedir, v)
+        if isinstance(v, dict) or isinstance(v, list):
+          self.translateEditorPaths(v)
+
+    if isinstance(data, list):
+      for i, v in enumerate(data):
+        if isinstance(v, dict) or isinstance(v, list):
+          self.translateEditorPaths(v)
 
 
 class FileListPanel:
