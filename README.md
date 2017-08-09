@@ -24,7 +24,8 @@ you're missing one of the above features, check Preferences > Package Settings
   - `git clone git@github.com:WebHare/sublime-package.git WebHare`
 
 To prepare a new release, add a tag with a higher semver to a commit. Pushing
-to github is enough to deploy. Do not forget to push the tag too!
+to github is enough to deploy, but make sure the tag is a simple 'major.minor.patch'
+and not prefixed with st3-
 
 ## Debugging tips
 Remember ctrl+backquote opens the Console to see errors
