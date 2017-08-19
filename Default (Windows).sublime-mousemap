@@ -1,7 +1,0 @@
-[
-    {
-        "button": "button1", "count": 2,
-        "press_command": "mouse_goto_codegrep",
-        "press_args": {"command": "drag_select", "args": {"by": "words"}}
-    }
-]

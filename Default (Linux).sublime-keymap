@@ -1,8 +1,4 @@
 [
-  { "keys": ["ctrl+shift+v"], "command": "validate_file" },
-  { "keys": ["ctrl+shift+r"], "command": "reveal_file" },
-  { "keys": ["ctrl+shift+f3"], "command": "codegrep" },
-
   { "keys": ["ctrl+shift+f10"], "command": "show_stacktrace" },
   { "keys": ["ctrl+f10"], "command": "get_stacktrace" },
 
@@ -14,6 +10,4 @@
   { "keys": ["ctrl+alt+shift+f12"], "command": "documentation_popup" },
 
   { "keys": ["ctrl+shift+t"], "command": "source_switch" },
-
-  { "keys": ["ctrl+shift+o"], "command": "reopen_last_file" }
 ]

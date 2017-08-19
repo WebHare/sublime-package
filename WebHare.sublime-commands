@@ -8,6 +8,4 @@
   { "caption": "WebHare: Symbol Search", "command": "symbol_search" },
   { "caption": "WebHare: Documentation Search", "command": "documentation_search" },
   { "caption": "WebHare: Source Switch", "command": "source_switch" },
-  { "caption": "File: Reveal File", "command": "reveal_file" },
-  { "caption": "Bookmarks: Toggle Line", "command": "toggle_bookmark_wholeline" },
 ]

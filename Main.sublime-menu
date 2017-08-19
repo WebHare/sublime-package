@@ -69,14 +69,6 @@
                         "caption": "Data Formatter (tollium_dev)"
                     },
                     {
-                        "command": "reveal_file",
-                        "caption": "Reveal File"
-                    },
-                    {
-                        "command": "toggle_bookmark_wholeline",
-                        "caption": "Toggle Line Bookmark"
-                    },
-                    {
                         "command": "add_loadlib",
                         "caption": "Add Missing LOADLIB"
                     }
