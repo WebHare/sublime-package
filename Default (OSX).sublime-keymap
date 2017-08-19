@@ -9,5 +9,5 @@
   { "keys": ["alt+shift+f12"], "command": "documentation_search", "args": {"query": true} },
   { "keys": ["ctrl+alt+shift+f12"], "command": "documentation_popup" },
 
-  { "keys": ["super+alt+t"], "command": "source_switch" }
+  { "keys": ["ctrl+alt+t"], "command": "source_switch" }
 ]
