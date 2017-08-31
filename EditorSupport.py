@@ -171,12 +171,33 @@ class MouseSymbolSearch(sublime_plugin.TextCommand):
     region = self.view.word(region.a)
     word = self.view.substr(region).strip()
 
+    scopename = self.view.scope_name(region.a)
+    scopecontents = self.view.substr(self.view.extract_scope(region.a))
+
     caller = EditorSupportCall(self.view)
 
-    isloadlib = re.search(r'loadlib[\s\n]*"([^"]*)"', line, re.I);
+    word = "\"" + word + "\""
     result = None
-    if isloadlib:
-      result = caller.call("resolveuri", isloadlib.group(1))
+    isresourcename = re.search(r'loadlib[\s\n]*"([^"]*)"', line, re.I);
+    if isresourcename:
+      word = isresourcename.group(1)
+    else:
+      isresourcename = re.search(r'\b((wh::|whres::|mod::|modulescript::|module::|moduleroot::)[a-z0-9\/._-]*)', line, re.I);
+      if isresourcename:
+        word = isresourcename.group(1)
+      else:
+        isresourcename = re.search(r'(@(mod|webhare)-[a-z0-9\/._-]*)', line, re.I);
+        if isresourcename:
+          word = isresourcename.group(1)
+        else:
+          if "string.quoted.js" in scopename: # relative url './blabla' or '../blabla' in javascript string
+            isresourcename = re.search(r'^[\'"](\.\.?/.*)[\'"]$', scopecontents, re.I);
+            if isresourcename:
+              word = isresourcename.group(1)
+
+    print(isresourcename, word)
+    if isresourcename:
+      result = caller.call("resolveuri", word)
     else:
       result = caller.call("symbolsearch", "\"" + word + "\"")
 
@@ -212,6 +233,8 @@ class DocumentationSearchCommand(sublime_plugin.WindowCommand):
       # If no text is selected, use the previous query as initial query text
       if not word:
         word = self.findbuffer.get()
+      if not word:
+        return
 
       # Ask for search string
       panel = self.window.show_input_panel("Documentation Search:", word, self.on_done, None, None)
@@ -276,6 +299,8 @@ class DocumentationPopupCommand(sublime_plugin.WindowCommand):
     region = view.sel()[0]
     region = view.word(region.a)
     word = view.substr(region).strip()
+    if not word:
+      return
 
     # Request documentation popup content
     caller = EditorSupportCall(self.view)
@@ -313,6 +338,8 @@ class MouseDocumentationPopupCommand(sublime_plugin.TextCommand):
     region = self.view.sel()[0]
     region = self.view.word(region.a)
     word = self.view.substr(region).strip()
+    if not word:
+      return
 
     caller = EditorSupportCall(self.view)
     result = caller.call("symbolsearch", "\"" + word + "\"")
@@ -432,9 +459,12 @@ class EditorSupportCall:
     curr = os.path.normpath(os.path.join(curr, ".."))
 
     webdavinfoname = ".wh.webdavinfo-" + str(int(time.time()))
-    for file in os.listdir(curr):
-      if re.match(r"^\.wh\.webdavinfo.*", file):
-        webdavinfoname = file
+    try:
+      for file in os.listdir(curr):
+        if re.match(r"^\.wh\.webdavinfo.*", file):
+          webdavinfoname = file
+    except:
+      print("exception")
 
     testfile = os.path.join(curr, webdavinfoname)
     res, config = self.readfileconfig(filename, testfile)
