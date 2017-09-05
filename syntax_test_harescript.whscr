@@ -192,6 +192,12 @@ PUBLIC OBJECTTYPE TestObject4 __ATTRIBUTES__(UNKNOWNISERROR)
 //      ^ keyword.harescript
   {
     this->aap := "empty";
+//  ^ variable.language.harescript
+    this->^aap := "empty";
+//  ^ variable.language.harescript
+//      ^^^ keyword.operator.harescript
+    ^aap := "empty";
+//  ^ keyword.operator.harescript
   }
 
   PRIVATE MACRO SetNoot(STRING value)

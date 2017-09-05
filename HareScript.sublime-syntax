@@ -151,7 +151,7 @@ contexts:
       push: preprocessor
 
     # HareScript operators
-    - match: "=|\\+|-|\\*|/|<|>|\\?(?!>)|:|\\|\\|"
+    - match: "=|\\+|-|\\*|/|<|>|\\?(?!>)|:|\\||\\^"
       scope: keyword.operator.harescript
 
 
