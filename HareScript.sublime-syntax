@@ -150,6 +150,14 @@ contexts:
     - match: \(\*
       push: preprocessor
 
+    # HareScript this->^ hat operator
+    - match: "(?<!->)\\^"
+      scope: variable.language.harescript
+
+    # HareScript compound operators
+    - match: "->|:=|::|!=|<=|>=|\\|\\||\\?\\?"
+      scope: keyword.operator.harescript
+
     # HareScript operators
     - match: "=|\\+|-|\\*|/|<|>|\\?(?!>)|:|\\||\\^"
       scope: keyword.operator.harescript
