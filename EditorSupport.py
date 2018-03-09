@@ -442,6 +442,7 @@ class EditorSupportCall:
       self.basedir = basedir
       self.accesstoken = accesstoken
       self.translateinfo = translateinfo
+      self.adminurl = editorservice
       transport = CustomSafeTransport(self.accesstoken) if editorservice.startswith("https:") else CustomTransport(self.accesstoken)
       self.editorservice = ServerProxy(editorservice, transport)
       self.reldir = reldir
@@ -488,7 +489,6 @@ class EditorSupportCall:
     if os.path.isfile(testfile):
       with open(testfile) as data_file:
         print("found config file at", testfile)
-        print("contents", data_file)
         data = json.load(data_file)
 
         accesstoken = data["accesstoken"]
