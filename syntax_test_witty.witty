@@ -58,3 +58,23 @@
 //  ^ keyword.witty
 [/component]
   // <- keyword.witty
+
+[rawcomponent js]
+// <- punctuation.section.embedded.begin
+ // <- meta.rawcomponent.witty
+ // <- keyword.witty
+//            ^ variable.other.witty
+  let array = [ 1 ];
+//^ text.raw.witty
+//            ^^^^^ text.raw.witty
+[/rawcomponent]
+// <- punctuation.section.embedded.begin
+//^ keyword.witty
+//            ^ punctuation.section.embedded.end
+
+<p>the [end]</p>
+// <- text.html.basic
+ // <- entity.name.tag.block.any.html
+//     ^ punctuation.section.embedded.begin
+//      ^ variable.other.witty
+//         ^ punctuation.section.embedded.end

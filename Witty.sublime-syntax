@@ -22,12 +22,20 @@ contexts:
         0: punctuation.section.embedded.end
       pop: true
 
-    # Component identifier
+    # Component identifiers
     - match: (?i)\b(component)[\s\n]+(\w+)
       captures:
         1: keyword.witty
         2: variable.other.witty
       scope: meta.component.witty
+
+    # Raw components
+    - match: (?i)\b(rawcomponent)[\s\n]+(\w+)[\s\n]*(\])
+      captures:
+        1: keyword.witty
+        2: variable.other.witty
+        3: punctuation.section.embedded.begin
+      push: rawcomponent
 
     # Witty keywords
     - match: (?i)\b(if|else|elseif|forevery|repeat|component|embed|embedoriginal|gettid|gethtmltid|not)\b
@@ -48,6 +56,17 @@ contexts:
     # Variables
     - match: \w+
       scope: variable.other.witty
+
+  # Raw component
+  rawcomponent:
+    - meta_scope: meta.rawcomponent.witty
+    - clear_scopes: true
+    - meta_content_scope: text.raw.witty
+    - match: (\[)\/(rawcomponent)(?=\])
+      captures:
+        1: punctuation.section.embedded.begin
+        2: keyword.witty
+      pop: true
 
   # Comment
   blockcomment:
