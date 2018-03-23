@@ -123,7 +123,7 @@
                                         "command": "webhare_recommended_package",
                                         "args":
                                         {
-                                            "package": "SublimeLinter-contrib-eslint"
+                                            "package": "SublimeLinter-eslint"
                                         },
                                         "checkbox": true
                                     },
