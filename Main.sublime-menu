@@ -115,7 +115,7 @@
                                         "command": "webhare_recommended_package",
                                         "args":
                                         {
-                                            "package": "SublimeLinter-contrib-hslint"
+                                            "package": "SublimeLinter-contrib-webhare"
                                         },
                                         "checkbox": true
                                     },
