@@ -18,10 +18,10 @@ class SourceSwitchCommand(sublime_plugin.TextCommand):
       library_path_include = result.group(1) + result.group(2) + "include" + result.group(2) + "screens"  + result.group(2) + result.group(4) + ".whlib"
 
       # ADDME when the majority of modules switches to /lib/, swap the default around
-      if os.path.isfile(library_path_lib):
-        self.view.window().open_file(library_path_lib)
-      else:
+      if os.path.isfile(library_path_include):
         self.view.window().open_file(library_path_include)
+      else:
+        self.view.window().open_file(library_path_lib)
 
       return
 
