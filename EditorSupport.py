@@ -312,7 +312,7 @@ class DocumentationPopupCommand(sublime_plugin.WindowCommand):
           content += "<br>"
         if "commenttext" in res and res["commenttext"] != "":
           content += res["commenttext"].replace("\n", "<br>") + """<br>"""
-        content += """<span class="storage type">""" + res["definition"].replace(" ", """&nbsp;""") + """<br></span>"""
+        content += """<span class="storage type">""" + escape(res["definition"]).replace(" ", """&nbsp;""") + """<br></span>\n"""
       #content = """
       #  <span class="comment block documentation">/** Format a DATETIME value */</span><br><span class="storage modifier">PUBLIC</span>
       #  <span class="storage type">STRING FUNCTION</span>
@@ -350,7 +350,7 @@ class MouseDocumentationPopupCommand(sublime_plugin.TextCommand):
           content += "<br>"
         if "commenttext" in res and res["commenttext"] != "":
           content += res["commenttext"].replace("\n", "<br>") + """<br>"""
-        content += """<span class="storage type">""" + res["definition"].replace(" ", """&nbsp;""") + """<br></span>"""
+        content += """<span class="storage type">""" + escape(res["definition"]).replace(" ", """&nbsp;""") + """<br></span>\n"""
       #content = """
       #  <span class="comment block documentation">/** Format a DATETIME value */</span><br><span class="storage modifier">PUBLIC</span>
       #  <span class="storage type">STRING FUNCTION</span>
