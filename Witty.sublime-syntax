@@ -46,7 +46,7 @@ contexts:
       scope: variable.language.witty
 
     # Witty encodings
-    - match: (?<=:)(?i)\b(none|java|xml|value|html|xhtml|url|base16|base64|cdata)\b
+    - match: (?<=:)(?i)\b(none|java|xml|value|html|xhtml|url|base16|base64|cdata|json|jsonvalue)\b
       scope: storage.modifier.witty
 
     # Comments
