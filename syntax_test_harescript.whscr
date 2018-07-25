@@ -144,6 +144,11 @@ INTEGER ARRAY numfiles :=
 INTEGER minfiles := Min[](numfiles);
 //                  ^ support.function.harescript
 
+public constant integer answer := 42;
+// <- storage.modifier.harescript
+//     ^ storage.modifier.attribute.harescript
+//              ^ storage.type.harescript
+
 OBJECTTYPE TestObject1
 // <- meta.objecttype.harescript
 // <- storage.type.harescript
