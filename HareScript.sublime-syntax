@@ -68,6 +68,12 @@ contexts:
         4: string.quoted.single.harescript
       scope: meta.loadlib.harescript
 
+    # Attributes
+    - match: (?i)\b(__ATTRIBUTES__)[\s\n]*\(
+      captures:
+        1: storage.modifier.harescript
+      push: attributes
+
     # HareScript types
     - match: (?i)\b(ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT|WEAKOBJECT)\b
       scope: storage.type.harescript
@@ -85,12 +91,8 @@ contexts:
       scope: keyword.operator.harescript
 
     # HareScript storage modifier
-    - match: (?i)\b(AGGREGATE|ASYNC|DEFAULT|PRIVATE|PTR|PUBLIC|STATIC|UPDATE|__ATTRIBUTES__)\b
+    - match: (?i)\b(AGGREGATE|ASYNC|CONSTANT|DEFAULT|PRIVATE|PTR|PUBLIC|STATIC|UPDATE|__ATTRIBUTES__)\b
       scope: storage.modifier.harescript
-
-    # HareScript attributes
-    - match: (?i)\b(CONSTANT|DEINITMACRO|DEPRECATED|EXECUTESHARESCRIPT|EXTERNAL|ISCOUNT|NOSTATEMODIFY|READONLY|SKIPTRACE|SPECIAL|TERMINATES|UNKNOWNISERROR|VARARG)\b
-      scope: storage.modifier.attribute.harescript
 
     # HareScript system functions
     - match: (?i)\b(Abort|Abs|Any|AnyToString|ArraySlice|AsyncReadFrom|AsyncReadLineFrom|AsyncSendBlobTo|Avg|BindSchemaToTable|BindTransactionToSchema|BindTransactionToTable|ByteToString|CallAnyPtrVA|CallFunctionPtrVA|CallMacroPtrVA|CanCastTypeTo|CastTo|CellDelete|CellExists|CellInsert|CellUpdate|CollectGarbage|ConsoleLog|Count|Debugger|DebuggerKeepalive|DecodeBase16|DecodeBase32|DecodeBase32Hex|DecodeBase64|DecodeCharSet|DecodeHSON|DecodeHSONBlob|DecodeHTML|DecodeJava|DecodeJSON|DecodeJSONBlob|DecodePacket|DecodeQP|DecodeUFS|DecodeURL|DecodeValue|Detokenize|DumpValue|EncodeAttributeValue|EncodeBase16|EncodeBase32|EncodeBase32Hex|EncodeBase64|EncodeCharSet|EncodeHSON|EncodeHSONBlob|EncodeHTML|EncodeJava|EncodeJSON|EncodeJSONBlob|EncodePacket|EncodeQP|EncodeTextNode|EncodeUFS|EncodeURL|EncodeValue|EnforceStructure|ExplainFunctionPtrSignature|ExplainFunctionSignature|ExtendObject|ExtractConsoleLog|GeneratorSpawn|GeneratorSpawnTrySync|GetArrayTypeDefaultElement|GetAsyncControl|GetAsyncStackTrace|GetAuthenticationRecord|GetBestCharacterSet|GetBindingFromSchema|GetBindingFromTable|GetByteValue|GetCell|GetExternalSessionData|GetHarescriptTypeIdByName|GetMember|GetMemberType|GetObjectMethodPtr|GetSpotHitCount|GetStackTrace|GetStoredScriptProperty|GetTypeDefaultArray|GetTypeDefaultValue|GetTypeName|GetUCValue|GroupedValues|IsAtEndOfStream|IsDefaultValue|IsObjectReferencePublic|IsPrintableASCII|IsTypeidArray|IsTypeidComparable|IsValidUTF8|KeepTransactionsAlive|Left|Length|Length64|LimitUTF8Bytes|MakeAutoNumber|MakeEmptyRecord|MakeFunctionPtr|MakeMergedRecord|MakeObject|MakeObjectStrong|MakeObjectWeak|MakeOverwrittenRecord|MakePublicObjectReference|MakeReplacedRecord|MakeUpdatedRecord|Max|MemberDelete|MemberExists|MemberInsert|MemberUpdate|Min|NormalizeWhitespace|ObjectExists|PickFirst|PickLast|Print|PrintRecordArrayTo|PrintRecordTo|PrintTo|Random|ReadFrom|ReadLineFrom|RecordExists|RedirectOutputTo|Reflect|RepackRecord|RepeatElement|RepeatText|Resolve|ReverseArray|Right|RunGeneratorUntilReturn|SearchElement|SearchLastElement|SearchLastSubstring|SearchSubstring|SeedRandomizer|SendBlobTo|SetAuthenticationRecord|SetErrorContextInfo|SetExternalSessionData|SetupConsoleLog|ShuffleArray|Sleep|SortArray|Substitute|Substring|Sum|TerminateScript|ToInteger|ToInteger64|Tokenize|ToLowercase|ToRecordArray|ToString|ToUppercase|TrimWhitespace|UCLeft|UCLength|UCRight|UCSearchLastSubstring|UCSearchSubstring|UCSubstring|UCToString|UCTruncate|UnpackRecord|ValidateFunctionPtr|ValidateOptions|WaitForMultiple|WaitForMultipleUntil|WaitForPromise|WaitUntil|WaitUntilMultiple|WeakObjectExists|WriteTo|__CAST_TO_VARIANT_ARRAY|__HS_CONVERTTOITERATOR|__HS_EnsureTraceItemForFirstError|__HS_GetPrivateMember|__HS_INTERNAL_CancelReceiveLine|__HS_INTERNAL_MakeObjectReferencePrivileged|__HS_INTERNAL_OVERRIDEEXECUTELIBRARY|__HS_INTERNAL_ReceiveFrom|__HS_INTERNAL_THROWEXCEPTION|__HS_OBJECTMATCHESOUID|__HS_REBINDFUNCTIONPTR|__HS_REBINDFUNCTIONPTR2|__HS_SetPrivateMember|__HS_SQL_AddRecordArraySource|__HS_SQL_AddTableSource|__HS_SQL_CloseQuery|__HS_SQL_DEBUG_GetVarAsOptimized|__HS_SQL_DeleteRecord|__HS_SQL_GetAction|__HS_SQL_GETARRAYRESULTS|__HS_SQL_GetGroupPosition|__HS_SQL_GetRecAction|__HS_SQL_GetRecordArrayPosition|__HS_SQL_GetRecordFase1|__HS_SQL_GetRecordFase2|__HS_SQL_GetSourcesBaseList|__HS_SQL_Insert|__HS_SQL_MakeArrayOfValue|__HS_SQL_MakeDistinct|__HS_SQL_MergeRecords|__HS_SQL_OpenCursor2|__HS_SQL_OverwriteRecord|__HS_SQL_Reorder_Results|__HS_SQL_ReportWhereResult|__HS_SQL_SortArray|__HS_SQL_UpdateRecord|__HS_TYPEID|__INTERNAL_AsyncWaitHandleReadSignalled|__INTERNAL_AsyncWaitHandleWriteSignalled|__INTERNAL_DEBUGGETFUNCTIONPTRRETURNTYPE)\b(?=([\s\n]*\[[\s\n]*\])?[\s\n]*\()
@@ -162,6 +164,23 @@ contexts:
     - match: "=|\\+|-|\\*|/|<|>|\\?(?!>)|:|\\||\\^"
       scope: keyword.operator.harescript
 
+
+  # __ATTRIBUTES
+  # This doesn't strictly parse <modifier> <string>? ("," <modifier> <string>?)*, but highlights any modifier and string
+  attributes:
+    - match: \)
+      pop: true
+    - match: (?i)\b(CONSTANT|DEINITMACRO|DEPRECATED|EXECUTESHARESCRIPT|EXTERNAL|ISCOUNT|NOSTATEMODIFY|READONLY|SKIPTRACE|SPECIAL|TERMINATES|UNKNOWNISERROR|VARARG)\b
+      captures:
+        1: storage.modifier.attribute.harescript
+    - match: \"
+      captures:
+        0: punctuation.definition.string.begin
+      push: dqstring
+    - match: \'
+      captures:
+        0: punctuation.definition.string.begin
+      push: sqstring
 
   # Double-quoted string constant
   dqstring:

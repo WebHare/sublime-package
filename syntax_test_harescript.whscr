@@ -146,7 +146,7 @@ INTEGER minfiles := Min[](numfiles);
 
 public constant integer answer := 42;
 // <- storage.modifier.harescript
-//     ^ storage.modifier.attribute.harescript
+//     ^ storage.modifier.harescript - storage.modifier.attribute.harescript
 //              ^ storage.type.harescript
 
 OBJECTTYPE TestObject1
@@ -184,6 +184,10 @@ PUBLIC OBJECTTYPE TestObject4 __ATTRIBUTES__(UNKNOWNISERROR)
 <
   STRING aap;
   // <- storage.type.harescript
+
+  BOOLEAN readonly;
+  // <- storage.type.harescript
+//        ^ source.harescript - storage.modifier.attribute.harescript
 
   PUBLIC PROPERTY noot(aap, SetNoot);
   // <- meta.property.harescript
@@ -246,4 +250,15 @@ PUBLIC OBJECTTYPE TestObject4 __ATTRIBUTES__(UNKNOWNISERROR)
 //                          ^ storage.type.harescript
 //                              ^ storage.type.harescript
   }
+
+  PUBLIC MACRO External() __ATTRIBUTES__(EXTERNAL 'wh_icu', CONSTANT, DEPRECATED "Don't use!");
+  // <- storage.modifier.harescript
+//       ^ keyword.harescript
+//             ^ identifier.function.harescript
+//                        ^ storage.modifier.harescript
+//                                       ^ storage.modifier.attribute.harescript
+//                                                 ^ string.quoted.single.harescript
+//                                                          ^ storage.modifier.attribute.harescript
+//                                                                    ^ storage.modifier.attribute.harescript
+//                                                                                ^ string.quoted.double.harescript
 >;
