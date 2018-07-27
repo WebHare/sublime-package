@@ -165,7 +165,7 @@ contexts:
       scope: keyword.operator.harescript
 
 
-  # __ATTRIBUTES
+  # __ATTRIBUTES__
   # This doesn't strictly parse <modifier> <string>? ("," <modifier> <string>?)*, but highlights any modifier and string
   attributes:
     - match: \)
