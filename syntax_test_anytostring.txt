@@ -13,10 +13,30 @@ HSON:
 //               ^ string.quoted.double.harescript
 //                               ^^ constant.character.escape.harescript
 //                                 ^ punctuation.definition.string.end
+  +STRINGFIELD: 'This is a string\n'
+//^ punctuation.anytostring
+// ^ identifier.cell.anytostring
+//            ^ punctuation.anytostring
+//              ^ punctuation.definition.string.begin
+//               ^ string.quoted.single.harescript
+//                               ^^ constant.character.escape.harescript
+//                                 ^ punctuation.definition.string.end
   +INTEGERFIELD: 12345678901234567890
 //^ punctuation.anytostring
 // ^ identifier.cell.anytostring
 //               ^ constant.numeric.harescript
+  +INTEGER64FIELD: 12345678901234567890i64
+//^ punctuation.anytostring
+// ^ identifier.cell.anytostring
+//                 ^ constant.numeric.harescript
+  +MONEYFIELD: 1.23456
+//^ punctuation.anytostring
+// ^ identifier.cell.anytostring
+//             ^ constant.numeric.harescript
+  +FLOAT: 1.2345678901234567890
+//^ punctuation.anytostring
+// ^ identifier.cell.anytostring
+//        ^ constant.numeric.harescript
   +BOOLEANFIELD: TRUE
 //^ punctuation.anytostring
 // ^ identifier.cell.anytostring
@@ -33,6 +53,11 @@ HSON:
 // ^ identifier.cell.anytostring
 //              ^ storage.modifier.harescript
 //                      ^ storage.type.harescript
+  +EMPTYRECORDFIELD: EMPTY RECORD
+//^ punctuation.anytostring
+// ^ identifier.cell.anytostring
+//                   ^ storage.modifier.anytostring
+//                         ^ storage.type.harescript
   +BLOBFIELD: BLOB (1234 bytes)
 //^ punctuation.anytostring
 // ^ identifier.cell.anytostring

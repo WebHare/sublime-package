@@ -1,7 +1,7 @@
 %YAML 1.2
 ---
 name: AnyToString
-first_line_match: (?i)^(JSON|HSON)(:)$
+first_line_match: (?i)^((JSON|HSON)(:))|(DumpValue from .*\(.*\))$
 scope: source.anytostring
 
 #ADDME: Some stuff within this context file is copied from HareScript.sublime-syntax. It would be cleaner if we can just
@@ -15,8 +15,14 @@ contexts:
         1: support.type.anytostring
         2: punctuation.anytostring
       push: anytostring
+    - match: (?i)^DumpValue from .*\(.*\)$
+      push: anytostring
 
   anytostring:
+
+    # A DumpValue is followed by an empty line, so we're done
+    - match: ^$
+      pop: true
 
     # Record (Array)
     - match: (?i)^\s*(\+)(RECORD\b( ARRAY)?)(?!:)
@@ -33,23 +39,30 @@ contexts:
         3: punctuation.anytostring
       scope: meta.cell.anytostring
 
+    # HareScript types (copied from HareScript.sublime-syntax)
+    - match: (?i)\b(ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT|WEAKOBJECT)\b
+      scope: storage.type.harescript
+
     # HareScript keywords (copied from HareScript.sublime-syntax)
     - match: (?i)\b(DELETE|FUNCTION|INSERT|MACRO|SELECT|ALL|AS|ASC|AT|BY|CELL|COLUMN|CLASSTYPE|CROSS|DEFAULTSTO|DESC|DISTINCT|END|EXCEPT|EXPORT|EXTEND|EXTENDSFROM|FALSE|FROM|FULL|GROUP|HAVING|INDEX|INNER|INTERSECT|INTO|JOIN|KEY|LIMIT|MEMBER|NEW|NULL|NVL|OFFSET|ONLY|ORDER|OUTER|PROPERTY|SET|TEMPORARY|TRUE|UNIQUE|USING|VALUES|VAR|VARTYPE|WHERE)\b
       scope: keyword.harescript
 
-    # HareScript types (copied from HareScript.sublime-syntax)
-    - match: (?i)\b(ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT)\b
-      scope: storage.type.harescript
-
     # HareScript storage modifier (copied from HareScript.sublime-syntax)
-    - match: (?i)\b(AGGREGATE|DEFAULT|PRIVATE|PTR|PUBLIC|UPDATE|__ATTRIBUTES__)\b
+    - match: (?i)\b(AGGREGATE|ASYNC|CONSTANT|DEFAULT|PRIVATE|PTR|PUBLIC|STATIC|UPDATE|__ATTRIBUTES__)\b
       scope: storage.modifier.harescript
+    # AnyToString storage modifier
+    - match: (?i)\b(EMPTY)\b
+      scope: storage.modifier.anytostring
 
     # String constants (copied from HareScript.sublime-syntax)
     - match: \"
       captures:
         0: punctuation.definition.string.begin
       push: dqstring
+    - match: \'
+      captures:
+        0: punctuation.definition.string.begin
+      push: sqstring
 
     # DATETIME constants
     - match: \b(\d+-\d{2}-\d{2})\ (\(\d+\))\ (\d{2}:\d{2}:\d{2}\.\d{3})\b
@@ -60,7 +73,7 @@ contexts:
       scope: comment.blob.anytostring
 
     # Decimal (integer, money and float), hexadecimal and binary numeric constants (copied from HareScript.sublime-syntax)
-    - match: \b(\d*\.)?\d+(i(64)?|m|f)?\b|\b0x\h+\b|\b0b(0|1)+\b
+    - match: \b(\d*\.)?\d+(i(64)?|m|f|e[+-]?[0-9]*)?\b|\b0x\h+\b|\b0b(0|1)+\b
       scope: constant.numeric.harescript
 
   # Double-quoted string constant (copied from HareScript.sublime-syntax)
@@ -72,7 +85,16 @@ contexts:
         0: punctuation.definition.string.end
       pop: true
 
-  # Escape characters within strings
+  # Single-quoted string constant (copied from HareScript.sublime-syntax)
+  sqstring:
+    - meta_content_scope: string.quoted.single.harescript
+    - include: escapes
+    - match: \'
+      captures:
+        0: punctuation.definition.string.end
+      pop: true
+
+  # Escape characters within strings (copied from HareScript.sublime-syntax)
   escapes:
     - match: \\[abfnrt\'\"\\]|\\[0-7]{3}|\\x\h{2}|\\u\h{4}
       scope: constant.character.escape.harescript
