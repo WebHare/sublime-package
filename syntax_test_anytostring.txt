@@ -36,7 +36,7 @@ HSON:
   +FLOAT: 1.2345678901234567890
 //^ punctuation.anytostring
 // ^ identifier.cell.anytostring
-//        ^ constant.numeric.harescript
+//        ^^^ constant.numeric.harescript
   +BOOLEANFIELD: TRUE
 //^ punctuation.anytostring
 // ^ identifier.cell.anytostring
@@ -71,3 +71,33 @@ HSON:
 //              ^ storage.modifier.harescript
 //                      ^ storage.type.harescript
 //                            ^ storage.type.harescript
+
+DumpValue from direct::/tmp/testscript.whscr:2:1 (:INITFUNCTION)
++-------+-------+-----+----------+----------------+---------+---------------+---------------------------+--------------+
+|BOOLEAN|INTEGER|MONEY|STRING    |DEFAULT DATETIME|RECORD   |RECORD ARRAY   |DATETIME                   |BLOB          |
+ // <- identifier.cell.anytostring
++-------+-------+-----+----------+----------------+---------+---------------+---------------------------+--------------+
+|TRUE   |1234   |1.234|'string\n'|DEFAULT DATETIME|RECORD[1]|RECORD ARRAY[1]|1970-01-01 (1) 00:00:00.000|BLOB (4 bytes)|
+ // <- keyword.harescript
+//       ^ constant.numeric.harescript
+//               ^^^ constant.numeric.harescript
+//                     ^ punctuation.definition.string.begin
+//                      ^ string.quoted.single.harescript
+//                            ^^ constant.character.escape.harescript
+//                              ^ punctuation.definition.string.end
+//                                ^ storage.modifier.harescript
+//                                        ^ storage.type.harescript
+//                                                 ^ storage.type.harescript
+//                                                        ^ constant.numeric.harescript
+//                                                           ^ storage.type.harescript
+//                                                                  ^ storage.type.harescript
+//                                                                        ^ constant.numeric.harescript
+//                                                                           ^ meta.datetime.anytostring
+//                                                                               ^ meta.datetime.anytostring
+//                                                                                     ^ meta.datetime.anytostring
+//                                                                                                     ^ meta.datetime.anytostring
+//                                                                                                       ^ storage.type.harescript
+//                                                                                                            ^ comment.blob.anytostring
+//                                                                                                             ^ comment.blob.anytostring
+//                                                                                                                    ^ comment.blob.anytostring
++-------+-------+-----+----------+----------------+---------+---------------+---------------------------+--------------+

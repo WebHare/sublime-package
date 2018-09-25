@@ -7,6 +7,15 @@ scope: source.anytostring
 #ADDME: Some stuff within this context file is copied from HareScript.sublime-syntax. It would be cleaner if we can just
 #       include specific contexts of another syntax file, without having to support the other syntax completely.
 
+# HareScript variables (copied from HareScript.sublime-syntax)
+variables:
+  attributes: (CONSTANT|DEINITMACRO|DEPRECATED|EXECUTESHARESCRIPT|EXTERNAL|ISCOUNT|NOSTATEMODIFY|READONLY|SKIPTRACE|SPECIAL|TERMINATES|UNKNOWNISERROR|VARARG)
+  controls: (AWAIT|BREAK|CASE|CATCH|CONTINUE|ELSE|FINALLY|FOR|FOREVERY|IF|GOTO|RETURN|SWITCH|THROW|TRY|WHILE|YIELD)
+  keywords: (DELETE|FUNCTION|INSERT|MACRO|SELECT|ALL|AS|ASC|AT|BY|CELL|COLUMN|CLASSTYPE|CROSS|DEFAULTSTO|DESC|DISTINCT|END|EXCEPT|EXPORT|EXTEND|EXTENDSFROM|FALSE|FROM|FULL|GROUP|HAVING|INDEX|INNER|INTERSECT|INTO|JOIN|KEY|LIMIT|MEMBER|NEW|NULL|NVL|OFFSET|ONLY|ORDER|OUTER|PROPERTY|SET|TEMPORARY|TRUE|UNIQUE|USING|VALUES|VAR|VARTYPE|WHERE)
+  operators: (AND|BITAND|BITLSHIFT|BITNEG|BITOR|BITRSHIFT|BITXOR|CONCAT|IN|LIKE|NOT|OR|TYPEID|XOR)
+  types: (ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT|WEAKOBJECT)
+  modifiers: (AGGREGATE|ASYNC|CONSTANT|DEFAULT|PRIVATE|PTR|PUBLIC|STATIC|UPDATE|__ATTRIBUTES__)
+
 contexts:
 
   main:
@@ -16,7 +25,22 @@ contexts:
         2: punctuation.anytostring
       push: anytostring
     - match: (?i)^DumpValue from .*\(.*\)$
+      push: test_anytostring
+
+  # Check if this is a "boxed" value
+  test_anytostring:
+    - match: ^\+-.*
+      push: anytostring_boxed
+
+    - match: .
       push: anytostring
+
+  anytostring_boxed:
+    - match: ^[^+].*
+      scope: identifier.cell.anytostring
+
+    - match: ^\+-.*
+      set: anytostring
 
   anytostring:
 
@@ -39,16 +63,16 @@ contexts:
         3: punctuation.anytostring
       scope: meta.cell.anytostring
 
-    # HareScript types (copied from HareScript.sublime-syntax)
-    - match: (?i)\b(ARRAY|BLOB|BOOLEAN|DATETIME|FIXEDPOINT|FLOAT|FUNCTION PTR|INTEGER|INTEGER64|MACRO PTR|MONEY|OBJECT|OBJECTTYPE|RECORD|REF|SCHEMA|STRING|TABLE|VARIANT|WEAKOBJECT)\b
+    # HareScript types
+    - match: (?i)\b{{types}}\b
       scope: storage.type.harescript
 
-    # HareScript keywords (copied from HareScript.sublime-syntax)
-    - match: (?i)\b(DELETE|FUNCTION|INSERT|MACRO|SELECT|ALL|AS|ASC|AT|BY|CELL|COLUMN|CLASSTYPE|CROSS|DEFAULTSTO|DESC|DISTINCT|END|EXCEPT|EXPORT|EXTEND|EXTENDSFROM|FALSE|FROM|FULL|GROUP|HAVING|INDEX|INNER|INTERSECT|INTO|JOIN|KEY|LIMIT|MEMBER|NEW|NULL|NVL|OFFSET|ONLY|ORDER|OUTER|PROPERTY|SET|TEMPORARY|TRUE|UNIQUE|USING|VALUES|VAR|VARTYPE|WHERE)\b
+    # HareScript keywords
+    - match: (?i)\b{{keywords}}\b
       scope: keyword.harescript
 
-    # HareScript storage modifier (copied from HareScript.sublime-syntax)
-    - match: (?i)\b(AGGREGATE|ASYNC|CONSTANT|DEFAULT|PRIVATE|PTR|PUBLIC|STATIC|UPDATE|__ATTRIBUTES__)\b
+    # HareScript storage modifier
+    - match: (?i)\b{{modifiers}}\b
       scope: storage.modifier.harescript
     # AnyToString storage modifier
     - match: (?i)\b(EMPTY)\b
