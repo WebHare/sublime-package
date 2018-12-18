@@ -174,7 +174,7 @@ PUBLIC STATIC OBJECTTYPE TestObject3
 <
 >;
 
-PUBLIC OBJECTTYPE TestObject4 __ATTRIBUTES__(UNKNOWNISERROR)
+PUBLIC OBJECTTYPE TestObject4 __ATTRIBUTES__(INTERNALPROTECTED)
 // <- meta.objecttype.harescript
 // <- storage.modifier.harescript
 //     ^ storage.type.harescript
