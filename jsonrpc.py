@@ -12,21 +12,6 @@ class ResponseError(xmlrpc.client.ResponseError):
 class Fault(xmlrpc.client.ResponseError):
     pass
 
-def _get_response(file, sock):
-    data = ""
-    while 1:
-        if sock:
-            response = sock.recv(1024)
-        else:
-            response = file.read(1024)
-        if not response:
-            break
-        data += response
-
-    file.close()
-
-    return data
-
 class Transport(xmlrpc.client.Transport):
     def send_headers(self, connection, headers):
         # change the Content-Type header from 'text/xml' to 'application/json'
