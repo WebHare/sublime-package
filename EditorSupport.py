@@ -4,6 +4,7 @@ from threading import Timer
 from SublimeLinter.lint import highlight
 from xmlrpc.client import Error
 from urllib.parse import urlsplit, urlunsplit, quote_plus
+from html import escape
 from .jsonrpc import ServerProxy, Transport, SafeTransport
 from .findbuffer import FindBuffer
 from .popups import show_popup
@@ -306,7 +307,7 @@ class DocumentationPopupCommand(sublime_plugin.WindowCommand):
       return
 
     # Request documentation popup content
-    caller = EditorSupportCall(self.view)
+    caller = EditorSupportCall(view)
     result = caller.call("symbolsearch", "\"" + word + "\"")
     if result["results"]:
       content = ""
