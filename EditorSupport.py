@@ -2,8 +2,9 @@ import sublime, sublime_plugin
 import copy, json, os, re, socket, subprocess, sys, webbrowser, time
 from threading import Timer
 from SublimeLinter.lint import highlight
-from xmlrpc.client import ServerProxy, Error, Transport, SafeTransport
+from xmlrpc.client import Error
 from urllib.parse import urlsplit, urlunsplit, quote_plus
+from .jsonrpc import ServerProxy, Transport, SafeTransport
 from .findbuffer import FindBuffer
 from .popups import show_popup
 
@@ -13,6 +14,8 @@ lastfilepanel = None
 
 validate_result_dict = {}
 lintdatagetter = None
+
+last_jsonrpc_id = 0
 
 
 def storeLinterDataGetter(getter):
@@ -444,7 +447,9 @@ class EditorSupportCall:
       self.translateinfo = translateinfo
       self.adminurl = editorservice
       transport = CustomSafeTransport(self.accesstoken) if editorservice.startswith("https:") else CustomTransport(self.accesstoken)
-      self.editorservice = ServerProxy(editorservice, transport)
+      global last_jsonrpc_id
+      last_jsonrpc_id += 1
+      self.editorservice = ServerProxy(editorservice, last_jsonrpc_id, transport)
       self.reldir = reldir
     else:
       sublime.status_message("Could not locate connection info")
