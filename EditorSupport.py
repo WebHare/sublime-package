@@ -283,7 +283,63 @@ class DocumentationSearchCommand(sublime_plugin.WindowCommand):
           docbrowser = None
         controller = webbrowser.get(docbrowser)
         if controller:
-          controller.open_new(result["url"])
+          controller.open(result["url"])
+          sublime.status_message("")
+        else:
+          sublime.status_message("Unknown browser '" + docbrowser + "'")
+      else:
+        sublime.status_message("No results to show for '" + word + "'")
+
+
+# The command to call to search a symbol and show the documentation in a browser
+class MouseDocumentationSearch(sublime_plugin.TextCommand):
+
+  def run_(self, edit, args):
+
+    # Run the command set in the args to select the word
+    system_command = args["command"] if "command" in args else None
+    if system_command:
+      system_args = dict({ "event": args["event"] }.items())
+      if "args" in args:
+        system_args.update(dict(args["args"].items()))
+      self.view.run_command(system_command, system_args)
+
+    # Get the selected word
+    region = self.view.sel()[0]
+    line = self.view.substr(self.view.line(region.a))
+    region = self.view.word(region.a)
+    word = self.view.substr(region).strip()
+
+    scopename = self.view.scope_name(region.a)
+    scopecontents = self.view.substr(self.view.extract_scope(region.a))
+
+    #print("'"+word+"'")
+    if not word:
+      sublime.status_message("Nothing to search for")
+      return
+
+    # Get the error list and save the stacktrace
+    sublime.status_message("Searching")
+    caller = EditorSupportCall(self.view)
+    result = caller.call("documentationsearch", "\"" + word + "\"")
+
+    if result:
+      print(result)
+      if not "url" in result:
+        # Display a message
+        sublime.status_message("No results received")
+        return
+
+      # If we have a url, open it, otherwise display a message
+      if result["url"]:
+        # Read preferences
+        prefs = sublime.load_settings("WebHare.sublime-settings")
+        docbrowser = prefs.get("documentation_browser", "")
+        if not docbrowser:
+          docbrowser = None
+        controller = webbrowser.get(docbrowser)
+        if controller:
+          controller.open(result["url"])
           sublime.status_message("")
         else:
           sublime.status_message("Unknown browser '" + docbrowser + "'")
