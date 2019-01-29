@@ -1,7 +1,6 @@
 import sublime, sublime_plugin
 import copy, json, os, re, socket, subprocess, sys, webbrowser, time
 from threading import Timer
-from SublimeLinter.lint import highlight
 from xmlrpc.client import Error
 from urllib.parse import urlsplit, urlunsplit, quote_plus
 from html import escape
@@ -842,7 +841,11 @@ class ValidateHarescript:
         return
 
       # Manual validation worked, so automatic validation may proceed again
-      data["supported"] = True
+      if not data["supported"]:
+        data["supported"] = True
+
+        # Schedule re-highlight so background highlighting is immediately active again
+        view.window().run_command("sublime_linter_lint")
 
       # If we have errors and/or warnings, show them, otherwise display a message
       results = []
