@@ -841,7 +841,7 @@ class ValidateHarescript:
         return
 
       # Manual validation worked, so automatic validation may proceed again
-      if not data["supported"]:
+      if not "supported" in data or not data["supported"]:
         data["supported"] = True
 
         # Schedule re-highlight so background highlighting is immediately active again
