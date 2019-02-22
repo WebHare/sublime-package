@@ -1,4 +1,5 @@
 import json
+import gzip
 from io import StringIO
 import xmlrpc.client
 
@@ -22,7 +23,10 @@ class Transport(xmlrpc.client.Transport):
 
     def parse_response(self, response):
         # just return the response, we'll decode later
-        return response.read()
+        data = response.read()
+        if response.info().get('Content-Encoding') == 'gzip':
+            data = gzip.decompress(data)
+        return data
 
 class SafeTransport(xmlrpc.client.SafeTransport):
     def send_headers(self, connection, headers):
@@ -34,7 +38,10 @@ class SafeTransport(xmlrpc.client.SafeTransport):
 
     def parse_response(self, response):
         # just return the response, we'll decode later
-        return response.read()
+        data = response.read()
+        if response.info().get('Content-Encoding') == 'gzip':
+            data = gzip.decompress(data)
+        return data
 
 class ServerProxy(object):
     def __init__(self, uri, msg_id=None, transport=None, use_datetime=0):
