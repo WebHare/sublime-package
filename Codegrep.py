@@ -92,7 +92,7 @@ class CodegrepCommand(sublime_plugin.WindowCommand):
       buildenv = prefs.get("build_env", None)
 
       # Run runscript with the codegrep script
-      args = ["wh", "run", "modulescript::system/tools/codegrep.whscr"]
+      args = ["wh", "codegrep"]
       if not codegrep_casesensitive:
         args.append("-i")
       if prefix:
