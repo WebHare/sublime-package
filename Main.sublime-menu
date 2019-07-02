@@ -127,6 +127,14 @@
                                         },
                                         "checkbox": true
                                     },
+                                    {
+                                        "command": "webhare_recommended_package",
+                                        "args":
+                                        {
+                                            "package": "Ecmascript Syntax"
+                                        },
+                                        "checkbox": true
+                                    },
                                     { "caption": "-" },
                                     {
                                         "command": "webhare_install_recommended_packages",
