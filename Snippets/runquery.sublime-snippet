@@ -1,7 +1,7 @@
 <snippet>
   <content><![CDATA[
 RunQuery(
-    [ outputcolumns := [ $1 ]
+    [ outputcolumns := CELL[ $1 ]
     , filters := [ [ field := "$2", value := $3 ]
                  ]
     ]);
