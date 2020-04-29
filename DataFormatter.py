@@ -19,7 +19,7 @@ class DataFormatterCommand(sublime_plugin.TextCommand):
     buildenv = prefs.get("build_env", None)
 
     # Run runscript with the dataformatter script
-    args = [ "wh", "rewrite", filepath, "-" ]
+    args = [ "wh", "dev:rewrite", filepath, "-" ]
 
     # Create an environment
     current_env = os.environ.copy()
