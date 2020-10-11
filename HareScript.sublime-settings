@@ -2,6 +2,7 @@
 	"extensions":
 	[
 		"tpl",
-		"shtml"
+		"shtml",
+    "whsock"
 	]
 }
