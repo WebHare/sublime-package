@@ -520,23 +520,9 @@ class EditorSupportCall:
     # Keep only the directory from the filename
     curr = os.path.normpath(os.path.join(curr, ".."))
 
-    webdavinfoname = ".wh.webdavinfo-" + str(int(time.time()))
-    try:
-      for file in os.listdir(curr):
-        if re.match(r"^\.wh\.webdavinfo.*", file):
-          webdavinfoname = file
-    except:
-      print("exception")
-
-    testfile = os.path.join(curr, webdavinfoname)
-    res, config = self.readfileconfig(filename, testfile)
-    if res:
-      reldir = os.path.relpath(filename, curr)
-      return True, curr, reldir, config
-
-    # Search for .wh.connectinfo, recursively
+    # Search for .wh.dev.connectinfo, recursively
     while --maxdepth > 0:
-      testfile = os.path.join(curr, ".wh.connectinfo")
+      testfile = os.path.join(curr, ".wh.dev.connectinfo")
       res, config = self.readfileconfig(filename, testfile)
       if res:
         reldir = os.path.relpath(filename, curr)
