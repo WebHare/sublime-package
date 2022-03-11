@@ -1,5 +1,5 @@
 # Sublime/WebHare package
-This package adds support for the WebHare CMS to Sublime. The package contains
+This package adds support for the WebHare Platform to Sublime. The package contains
 the following:
 
 - HareScript and Witty (the WebHare template language) syntax highlighting
